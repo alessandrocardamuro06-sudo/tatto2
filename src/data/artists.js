@@ -1,0 +1,58 @@
+const ARTISTS = [
+  {
+    id: 0,
+    initials: 'MF',
+    color: '#c8523a',
+    bg: '#2a1a18',
+    name: 'Marco Ferretti',
+    style: 'Blackwork · Dotwork',
+    works: 214,
+    rating: '4.9',
+    exp: '6y',
+    bio: {
+      it: 'Marco lavora esclusivamente in blackwork e dotwork dal 2018. La sua firma è la precisione geometrica e la densità del puntinato, che costruisce volumi senza mai usare il grigio lavato.',
+      en: 'Marco has worked exclusively in blackwork and dotwork since 2018. His signature is geometric precision and the density of his dotwork, building volume without ever using washed grey.',
+      de: 'Marco arbeitet seit 2018 ausschließlich in Blackwork und Dotwork. Sein Markenzeichen ist geometrische Präzision und die Dichte seines Punktwerks.',
+    },
+    specs: ['Geometric', 'Mandala', 'Linee pulite', 'Pattern ripetitivi', 'Sacred geometry', 'Cover-up'],
+    patternBg: '#1a1a1a',
+  },
+  {
+    id: 1,
+    initials: 'SR',
+    color: '#5DCAA5',
+    bg: '#1e2a24',
+    name: 'Sofia Ricci',
+    style: 'Watercolor · Neo-trad',
+    works: 189,
+    rating: '5.0',
+    exp: '4y',
+    bio: {
+      it: 'Sofia porta il colore in modo che sembra dipinto sulla pelle. Specializzata in soggetti botanici e animali, lavora con inchiostri giapponesi e una tecnica di sfumatura unica.',
+      en: 'Sofia brings colour in a way that looks painted on skin. Specialised in botanical and animal subjects, she works with Japanese inks and a unique blending technique.',
+      de: 'Sofia bringt Farbe so auf die Haut, dass es aussieht wie gemalt. Spezialisiert auf botanische und tierische Motive mit japanischen Tinten.',
+    },
+    specs: ['Botanico', 'Animali', 'Ritratti femminili', 'Sfumature', 'Floreale', 'Illustrativo'],
+    patternBg: '#1a2520',
+  },
+  {
+    id: 2,
+    initials: 'LD',
+    color: '#85B7EB',
+    bg: '#1a1e2a',
+    name: "Luca D'Angelo",
+    style: 'Realism · Portrait',
+    works: 301,
+    rating: '4.8',
+    exp: '9y',
+    bio: {
+      it: "Luca è il reference del realismo in studio. Con 9 anni di esperienza, lavora principalmente su ritratti e soggetti figurativi in bianco e nero.",
+      en: "Luca is the studio's realism reference. With 9 years of experience, he works mainly on portraits and figurative subjects in black and white.",
+      de: "Luca ist die Realismusreferenz des Studios. Mit 9 Jahren Erfahrung arbeitet er hauptsächlich an Porträts und figurativen Motiven in Schwarz-Weiß.",
+    },
+    specs: ['Ritratti', 'B&W realism', 'Texture pelle', 'Wildlife', 'Fine-line', 'Large pieces'],
+    patternBg: '#12151f',
+  },
+];
+
+export default ARTISTS;
