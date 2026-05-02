@@ -9,7 +9,8 @@ const firebaseConfig = {
   projectId: "tattostudio-871a8",
   storageBucket: "tattostudio-871a8.firebasestorage.app",
   messagingSenderId: "356880787394",
-  appId: "1:356880787394:web:1f20922496f5e8db9c985b"
+  appId: "1:356880787394:web:1f20922496f5e8db9c985b",
+  measurementId: "G-JBKGRR53H8"
 };
 
 const app = initializeApp(firebaseConfig);
