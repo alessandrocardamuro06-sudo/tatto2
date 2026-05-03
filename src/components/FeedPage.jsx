@@ -34,24 +34,36 @@ export default function FeedPage({ t, userProfile }) {
     return unsub;
   }, []);
 
-  const handlePost = async () => {
-    if (!text.trim()) return;
-    setLoading(true);
-    try {
-      await addDoc(collection(db, 'posts'), {
-        text: text.trim(),
-       authorName: userProfile?.name || 'Utente',
-       authorRole: userProfile?.role || 'cliente',
-       authorInitials: userProfile?.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U',
-        likes: [],
-        createdAt: serverTimestamp(),
-      });
-      setText('');
-    } catch (e) {
-      console.error(e);
+const handlePost = async () => {
+  if (!text.trim()) return;
+  setLoading(true);
+  try {
+    const { getDoc, doc } = await import('firebase/firestore');
+    const { auth, db } = await import('../firebase');
+    
+    let profile = userProfile;
+    
+    // Se userProfile è null, lo carichiamo direttamente
+    if (!profile && auth.currentUser) {
+      const snap = await getDoc(doc(db, 'users', auth.currentUser.uid));
+      if (snap.exists()) profile = snap.data();
     }
-    setLoading(false);
-  };
+
+    await addDoc(collection(db, 'posts'), {
+      text: text.trim(),
+      authorName: profile?.name || 'Utente',
+      authorRole: profile?.role || 'cliente',
+      authorInitials: profile?.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U',
+      likes: [],
+      createdAt: serverTimestamp(),
+    });
+    setText('');
+  } catch (e) {
+    console.error('Errore pubblicazione:', e);
+    alert('Errore: ' + e.message);
+  }
+  setLoading(false);
+};
 
   const handleLike = async (post) => {
     if (!userProfile) return;
