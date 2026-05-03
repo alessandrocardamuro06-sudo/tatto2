@@ -24,6 +24,7 @@ export default function FeedPage({ t, userProfile }) {
   const [posts, setPosts] = useState([]);
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
+  console.log('userProfile nel feed:', userProfile);
 
   useEffect(() => {
     const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'));
