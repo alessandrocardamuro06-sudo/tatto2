@@ -100,14 +100,14 @@ const handlePost = async () => {
             {userProfile?.name} · {userProfile?.role}
           </span>
           <button
-  onClick={() => {
-    alert('testo: ' + text + ' | profilo: ' + JSON.stringify(userProfile));
-    handlePost();
-  }}
+  onClick={handlePost}
+  disabled={loading || !text.trim()}
   style={{
     background: '#c8523a', color: '#fff', border: 'none',
     borderRadius: 6, padding: '7px 16px', fontSize: 12, fontWeight: 600,
-    fontFamily: 'Syne, sans-serif', cursor: 'pointer',
+    fontFamily: 'Syne, sans-serif',
+    opacity: loading || !text.trim() ? 0.5 : 1,
+    cursor: loading || !text.trim() ? 'not-allowed' : 'pointer',
   }}
 >{t('publish')}</button>
         </div>
