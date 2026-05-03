@@ -35,7 +35,7 @@ export default function FeedPage({ t, userProfile }) {
   }, []);
 
   const handlePost = async () => {
-    if (!text.trim() || !userProfile) return;
+    if (!text.trim()) return;
     setLoading(true);
     try {
       await addDoc(collection(db, 'posts'), {
