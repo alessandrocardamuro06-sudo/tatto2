@@ -40,9 +40,9 @@ export default function FeedPage({ t, userProfile }) {
     try {
       await addDoc(collection(db, 'posts'), {
         text: text.trim(),
-        authorName: userProfile.name,
-        authorRole: userProfile.role,
-        authorInitials: userProfile.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2),
+       authorName: userProfile?.name || 'Utente',
+       authorRole: userProfile?.role || 'cliente',
+       authorInitials: userProfile?.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U',
         likes: [],
         createdAt: serverTimestamp(),
       });
