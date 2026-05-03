@@ -15,17 +15,14 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(undefined);
+  const [currentUser, setCurrentUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   async function register(email, password, name, role) {
     const result = await createUserWithEmailAndPassword(auth, email, password);
     await setDoc(doc(db, 'users', result.user.uid), {
-      name,
-      email,
-      role,
-      createdAt: new Date()
+      name, email, role, createdAt: new Date()
     });
     return result;
   }
@@ -39,19 +36,31 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
+    // Timeout di sicurezza — se Firebase non risponde in 5 secondi, mostra il login
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 5000);
+
     const unsub = onAuthStateChanged(auth, async (user) => {
+      clearTimeout(timeout);
       setCurrentUser(user);
       if (user) {
-        const snap = await getDoc(doc(db, 'users', user.uid));
-        if (snap.exists()) {
-          setUserProfile(snap.data());
+        try {
+          const snap = await getDoc(doc(db, 'users', user.uid));
+          if (snap.exists()) setUserProfile(snap.data());
+        } catch(e) {
+          console.error('Errore caricamento profilo:', e);
         }
       } else {
         setUserProfile(null);
       }
       setLoading(false);
     });
-    return unsub;
+
+    return () => {
+      clearTimeout(timeout);
+      unsub();
+    };
   }, []);
 
   if (loading) {
@@ -63,9 +72,7 @@ export function AuthProvider({ children }) {
         <div style={{
           fontFamily: 'DM Serif Display, serif',
           fontSize: 24, color: '#c8523a', fontStyle: 'italic',
-        }}>
-          Needle...
-        </div>
+        }}>Needle...</div>
       </div>
     );
   }
