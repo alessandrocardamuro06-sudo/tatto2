@@ -43,7 +43,7 @@ function AppInner() {
         <img
           src="/Logo_Inklovers-2.png"
           alt="Ink Lovers"
-          style={{ height: 36, objectFit: 'contain' }}
+          style={{ height: 48, objectFit: 'contain' }}
         />
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {['it','en','de'].map(l => (
