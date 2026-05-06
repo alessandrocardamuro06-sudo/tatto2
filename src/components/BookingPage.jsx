@@ -51,8 +51,8 @@ export default function BookingPage({ t, preselectedArtist, userProfile }) {
     setLoading(true);
     try {
       await addDoc(collection(db, 'bookings'), {
-        clientName: userProfile.name,
-        clientEmail: userProfile.email,
+        clientName: userProfile?.name || 'Utente',
+        clientEmail: userProfile?.email || 'nessuna@email.com',
         artist: artist || 'Nessuna preferenza',
         day: selectedDay,
         slot: selectedSlot,
