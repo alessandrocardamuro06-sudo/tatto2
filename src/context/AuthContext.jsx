@@ -36,10 +36,7 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    // Timeout di sicurezza — se Firebase non risponde in 5 secondi, mostra il login
-    const timeout = setTimeout(() => {
-      setLoading(false);
-    }, 5000);
+    const timeout = setTimeout(() => setLoading(false), 5000);
 
     const unsub = onAuthStateChanged(auth, async (user) => {
       clearTimeout(timeout);
@@ -57,22 +54,28 @@ export function AuthProvider({ children }) {
       setLoading(false);
     });
 
-    return () => {
-      clearTimeout(timeout);
-      unsub();
-    };
+    return () => { clearTimeout(timeout); unsub(); };
   }, []);
 
   if (loading) {
     return (
       <div style={{
         height: '100vh', background: '#0e0e0e',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center', gap: 24,
       }}>
+        <img
+          src="/Logo_Inklovers-2.png"
+          alt="Ink Lovers"
+          style={{ width: 180, objectFit: 'contain', opacity: 0.9 }}
+        />
         <div style={{
-          fontFamily: 'DM Serif Display, serif',
-          fontSize: 24, color: '#c8523a', fontStyle: 'italic',
-        }}>Needle...</div>
+          width: 40, height: 2, background: '#c8523a',
+          animation: 'none', borderRadius: 2,
+        }} />
+        <div style={{ fontSize: 11, fontFamily: 'DM Mono, monospace', color: '#333', letterSpacing: '.1em' }}>
+          LOADING
+        </div>
       </div>
     );
   }
