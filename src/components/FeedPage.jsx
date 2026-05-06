@@ -1,30 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { db } from '../firebase';
+import React, { useState, useEffect, useRef } from 'react';
+import { db, storage } from '../firebase';
 import {
   collection, addDoc, onSnapshot,
   orderBy, query, serverTimestamp,
   updateDoc, doc, arrayUnion, arrayRemove
 } from 'firebase/firestore';
-
-const ImagePlaceholder = () => (
-  <div style={{
-    width: '100%', height: 110, borderRadius: 8,
-    background: '#1c1c1c', border: '1px solid #222',
-    display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10,
-  }}>
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#333" strokeWidth="1.5">
-      <rect x="3" y="3" width="18" height="18" rx="2"/>
-      <circle cx="8.5" cy="8.5" r="1.5"/>
-      <polyline points="21 15 16 10 5 21"/>
-    </svg>
-  </div>
-);
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 export default function FeedPage({ t, userProfile }) {
   const [posts, setPosts] = useState([]);
   const [text, setText] = useState('');
-  const [loading, setLoading] = useState(false);
-  console.log('userProfile nel feed:', userProfile);
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const fileRef = useRef();
 
   useEffect(() => {
     const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'));
@@ -34,42 +24,66 @@ export default function FeedPage({ t, userProfile }) {
     return unsub;
   }, []);
 
-const handlePost = async () => {
-  if (!text.trim()) return;
-  setLoading(true);
-  try {
-    const { getDoc, doc } = await import('firebase/firestore');
-    const { auth, db } = await import('../firebase');
-    
-    let profile = userProfile;
-    
-    // Se userProfile è null, lo carichiamo direttamente
-    if (!profile && auth.currentUser) {
-      const snap = await getDoc(doc(db, 'users', auth.currentUser.uid));
-      if (snap.exists()) profile = snap.data();
-    }
+  const handleImageSelect = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setImage(file);
+    setImagePreview(URL.createObjectURL(file));
+  };
 
-    await addDoc(collection(db, 'posts'), {
-      text: text.trim(),
-      authorName: profile?.name || 'Utente',
-      authorRole: profile?.role || 'cliente',
-      authorInitials: profile?.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U',
-      likes: [],
-      createdAt: serverTimestamp(),
-    });
-    setText('');
-  } catch (e) {
-    console.error('Errore pubblicazione:', e);
-    alert('Errore: ' + e.message);
-  }
-  setLoading(false);
-};
+  const removeImage = () => {
+    setImage(null);
+    setImagePreview(null);
+    if (fileRef.current) fileRef.current.value = '';
+  };
+
+  const handlePost = async () => {
+    if (!text.trim()) return;
+    setUploading(true);
+    try {
+      let imageUrl = null;
+
+      if (image) {
+        const storageRef = ref(storage, `posts/${Date.now()}_${image.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, image);
+        imageUrl = await new Promise((resolve, reject) => {
+          uploadTask.on('state_changed',
+            (snapshot) => {
+              setProgress(Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100));
+            },
+            reject,
+            async () => {
+              const url = await getDownloadURL(uploadTask.snapshot.ref);
+              resolve(url);
+            }
+          );
+        });
+      }
+
+      await addDoc(collection(db, 'posts'), {
+        text: text.trim(),
+        imageUrl: imageUrl || null,
+        authorName: userProfile?.name || 'Utente',
+        authorRole: userProfile?.role || 'cliente',
+        authorInitials: userProfile?.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U',
+        likes: [],
+        createdAt: serverTimestamp(),
+      });
+
+      setText('');
+      removeImage();
+      setProgress(0);
+    } catch (e) {
+      alert('Errore: ' + e.message);
+    }
+    setUploading(false);
+  };
 
   const handleLike = async (post) => {
     if (!userProfile) return;
-    const ref = doc(db, 'posts', post.id);
+    const ref2 = doc(db, 'posts', post.id);
     const liked = post.likes?.includes(userProfile.name);
-    await updateDoc(ref, {
+    await updateDoc(ref2, {
       likes: liked ? arrayRemove(userProfile.name) : arrayUnion(userProfile.name)
     });
   };
@@ -95,21 +109,69 @@ const handlePost = async () => {
             fontFamily: 'Syne, sans-serif',
           }}
         />
+
+        {/* Preview immagine */}
+        {imagePreview && (
+          <div style={{ position: 'relative', marginTop: 10 }}>
+            <img
+              src={imagePreview}
+              alt="preview"
+              style={{ width: '100%', maxHeight: 200, objectFit: 'cover', borderRadius: 8 }}
+            />
+            <button
+              onClick={removeImage}
+              style={{
+                position: 'absolute', top: 8, right: 8,
+                background: 'rgba(0,0,0,.7)', border: 'none', borderRadius: '50%',
+                width: 28, height: 28, color: '#fff', fontSize: 14,
+                cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}
+            >✕</button>
+          </div>
+        )}
+
+        {/* Progress bar upload */}
+        {uploading && progress > 0 && (
+          <div style={{ marginTop: 10, background: '#1c1c1c', borderRadius: 4, overflow: 'hidden' }}>
+            <div style={{
+              height: 3, background: '#c8523a',
+              width: `${progress}%`, transition: 'width .2s',
+            }} />
+          </div>
+        )}
+
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 10 }}>
-          <span style={{ fontSize: 11, fontFamily: 'DM Mono, monospace', color: '#555' }}>
-            {userProfile?.name} · {userProfile?.role}
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageSelect}
+              style={{ display: 'none' }}
+              id="photo-input"
+            />
+            <label htmlFor="photo-input" style={{
+              background: 'none', border: '1px solid #2a2a2a',
+              borderRadius: 6, padding: '6px 12px', color: '#888', fontSize: 12,
+              cursor: 'pointer', fontFamily: 'Syne, sans-serif',
+            }}>
+              {t('attach')}
+            </label>
+            <span style={{ fontSize: 11, fontFamily: 'DM Mono, monospace', color: '#555' }}>
+              {userProfile?.name} · {userProfile?.role}
+            </span>
+          </div>
           <button
-  onClick={handlePost}
-  disabled={loading || !text.trim()}
-  style={{
-    background: '#c8523a', color: '#fff', border: 'none',
-    borderRadius: 6, padding: '7px 16px', fontSize: 12, fontWeight: 600,
-    fontFamily: 'Syne, sans-serif',
-    opacity: loading || !text.trim() ? 0.5 : 1,
-    cursor: loading || !text.trim() ? 'not-allowed' : 'pointer',
-  }}
->{t('publish')}</button>
+            onClick={handlePost}
+            disabled={uploading || !text.trim()}
+            style={{
+              background: '#c8523a', color: '#fff', border: 'none',
+              borderRadius: 6, padding: '7px 16px', fontSize: 12, fontWeight: 600,
+              fontFamily: 'Syne, sans-serif',
+              opacity: uploading || !text.trim() ? 0.5 : 1,
+              cursor: uploading || !text.trim() ? 'not-allowed' : 'pointer',
+            }}
+          >{uploading ? `${progress}%` : t('publish')}</button>
         </div>
       </div>
 
@@ -143,6 +205,16 @@ const handlePost = async () => {
                 </div>
               </div>
             </div>
+
+            {/* Immagine post */}
+            {post.imageUrl && (
+              <img
+                src={post.imageUrl}
+                alt="post"
+                style={{ width: '100%', borderRadius: 8, marginBottom: 10, maxHeight: 300, objectFit: 'cover' }}
+              />
+            )}
+
             <p style={{ fontSize: 13, lineHeight: 1.7, color: '#aaa', marginBottom: 12 }}>{post.text}</p>
             <div style={{ display: 'flex', gap: 16 }}>
               <button
