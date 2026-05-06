@@ -27,11 +27,13 @@ export default function AuthPage({ t }) {
         await register(email, password, name, role);
       }
     } catch (e) {
-      setError(e.message.includes('wrong-password') || e.message.includes('user-not-found')
-        ? 'Email o password errati.'
-        : e.message.includes('email-already-in-use')
-        ? 'Email già registrata.'
-        : 'Errore. Riprova.');
+      setError(
+        e.message.includes('wrong-password') || e.message.includes('user-not-found')
+          ? 'Email o password errati.'
+          : e.message.includes('email-already-in-use')
+          ? 'Email già registrata.'
+          : 'Errore. Riprova.'
+      );
     }
     setLoading(false);
   };
@@ -39,23 +41,22 @@ export default function AuthPage({ t }) {
   return (
     <div style={{
       flex: 1, display: 'flex', flexDirection: 'column',
-      alignItems: 'center', justifyContent: 'center', padding: 24,
+      alignItems: 'center', justifyContent: 'center',
+      padding: 24, background: '#0e0e0e', minHeight: '100vh',
     }}>
-      <div style={{
-        fontFamily: 'DM Serif Display, serif', fontSize: 32,
-        color: '#f0ece4', marginBottom: 4, textAlign: 'center',
-      }}>
-        DARK<span style={{ color: '#c8523a', fontStyle: 'italic' }}>Needle</span>
-      </div>
-      <div style={{ fontSize: 12, color: '#555', fontFamily: 'DM Mono, monospace', marginBottom: 32 }}>
-        Studio
-      </div>
+      {/* Logo */}
+      <img
+        src="/Logo_Inklovers-2.png"
+        alt="Ink Lovers"
+        style={{ width: 160, objectFit: 'contain', marginBottom: 32 }}
+      />
 
       <div style={{
         width: '100%', maxWidth: 340,
         background: '#161616', border: '1px solid #1e1e1e',
         borderRadius: 14, padding: 24,
       }}>
+        {/* Tab login/registrati */}
         <div style={{ display: 'flex', marginBottom: 20, background: '#1c1c1c', borderRadius: 8, padding: 3 }}>
           {['Accedi', 'Registrati'].map((label, i) => (
             <button key={i} onClick={() => setIsLogin(i === 0)} style={{
@@ -63,7 +64,7 @@ export default function AuthPage({ t }) {
               fontFamily: 'Syne, sans-serif', fontSize: 13, fontWeight: 600,
               background: isLogin === (i === 0) ? '#c8523a' : 'none',
               color: isLogin === (i === 0) ? '#fff' : '#555',
-              transition: 'all .2s',
+              transition: 'all .2s', cursor: 'pointer',
             }}>{label}</button>
           ))}
         </div>
@@ -79,10 +80,13 @@ export default function AuthPage({ t }) {
             <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
               {['cliente', 'artista'].map(r => (
                 <button key={r} onClick={() => setRole(r)} style={{
-                  flex: 1, padding: '9px 0', border: `1px solid ${role === r ? '#c8523a' : '#2a2a2a'}`,
-                  borderRadius: 8, background: role === r ? '#c8523a' : '#1c1c1c',
-                  color: role === r ? '#fff' : '#666', fontSize: 13,
-                  fontFamily: 'Syne, sans-serif', fontWeight: 600, textTransform: 'capitalize',
+                  flex: 1, padding: '9px 0',
+                  border: `1px solid ${role === r ? '#c8523a' : '#2a2a2a'}`,
+                  borderRadius: 8,
+                  background: role === r ? '#c8523a' : '#1c1c1c',
+                  color: role === r ? '#fff' : '#666',
+                  fontSize: 13, fontFamily: 'Syne, sans-serif',
+                  fontWeight: 600, textTransform: 'capitalize', cursor: 'pointer',
                 }}>{r}</button>
               ))}
             </div>
