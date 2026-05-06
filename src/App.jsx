@@ -35,10 +35,16 @@ function AppInner() {
   return (
     <div style={{ maxWidth: 480, margin: '0 auto', height: '100vh', display: 'flex', flexDirection: 'column', background: '#0e0e0e' }}>
       {/* Topbar */}
-      <div style={{ background: '#0e0e0e', padding: '14px 20px 10px', borderBottom: '1px solid #1e1e1e', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
-        <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: 19, color: '#f0ece4' }}>
-          DARK<span style={{ color: '#c8523a', fontStyle: 'italic' }}>Needle</span>
-        </div>
+      <div style={{
+        background: '#0e0e0e', padding: '10px 20px',
+        borderBottom: '1px solid #1e1e1e',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0,
+      }}>
+        <img
+          src="/Logo_Inklovers-2.png"
+          alt="Ink Lovers"
+          style={{ height: 36, objectFit: 'contain' }}
+        />
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {['it','en','de'].map(l => (
             <button key={l} onClick={() => setLang(l)} style={{
@@ -60,7 +66,11 @@ function AppInner() {
 
       {/* User badge */}
       {userProfile && (
-        <div style={{ padding: '6px 20px', background: '#111', borderBottom: '1px solid #1e1e1e', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{
+          padding: '6px 20px', background: '#111',
+          borderBottom: '1px solid #1e1e1e',
+          display: 'flex', alignItems: 'center', gap: 8,
+        }}>
           <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#c8523a' }} />
           <span style={{ fontSize: 11, fontFamily: 'DM Mono, monospace', color: '#555' }}>
             {userProfile.name} · <span style={{ color: '#c8523a' }}>{userProfile.role}</span>
