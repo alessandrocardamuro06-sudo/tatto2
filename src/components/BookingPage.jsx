@@ -47,7 +47,7 @@ export default function BookingPage({ t, preselectedArtist, userProfile }) {
   }, [userProfile]);
 
   const handleBook = async () => {
-    if (!selectedSlot || !userProfile) return;
+    if (!selectedSlot) return;
     setLoading(true);
     try {
       await addDoc(collection(db, 'bookings'), {
