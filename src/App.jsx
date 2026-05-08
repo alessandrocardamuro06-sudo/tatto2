@@ -15,8 +15,6 @@ const NAV_ITEMS = [
   { id: 'booking', labelKey: 'nav-booking', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> },
 ];
 
-const ADMIN_NAV = { id: 'admin', labelKey: 'nav-admin', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/><path d="M18 14l2 2 4-4"/></svg> };
-
 function AppInner() {
   const { currentUser, userProfile, logout } = useAuth();
   const [lang, setLang] = useState('it');
@@ -24,14 +22,14 @@ function AppInner() {
   const [selectedArtistId, setSelectedArtistId] = useState(null);
   const [preselectedArtist, setPreselectedArtist] = useState('');
 
-  const t = useCallback((key) => {
-    return LANGS[lang]?.[key] ?? LANGS['it']?.[key] ?? key;
-  }, [lang]);
+  const t = useCallback((key) => LANGS[lang]?.[key] ?? LANGS['it']?.[key] ?? key, [lang]);
 
   if (!currentUser) return <AuthPage t={t} />;
 
   const isAdmin = userProfile?.role === 'admin';
-  const navItems = isAdmin ? [...NAV_ITEMS, ADMIN_NAV] : NAV_ITEMS;
+  const navItems = isAdmin
+    ? [...NAV_ITEMS, { id: 'admin', labelKey: 'nav-admin', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg> }]
+    : NAV_ITEMS;
 
   const handleSelectArtist = (id) => { setSelectedArtistId(id); setPage('profile'); };
   const handleBookArtist = (name) => { setPreselectedArtist(name); setPage('booking'); };
@@ -39,29 +37,37 @@ function AppInner() {
   const activeNavId = page === 'profile' ? 'artists' : page;
 
   return (
-    <div style={{ maxWidth: 480, margin: '0 auto', height: '100vh', display: 'flex', flexDirection: 'column', background: '#0e0e0e' }}>
+    <div style={{
+      maxWidth: 480, margin: '0 auto', height: '100vh',
+      display: 'flex', flexDirection: 'column',
+      background: '#080808',
+      backgroundImage: 'radial-gradient(ellipse at 30% 0%, rgba(255,255,255,0.03) 0%, transparent 50%), radial-gradient(ellipse at 70% 100%, rgba(255,255,255,0.02) 0%, transparent 50%)',
+    }}>
+
       {/* Topbar */}
       <div style={{
-        background: '#0e0e0e', padding: '10px 20px',
-        borderBottom: '1px solid #1e1e1e',
+        padding: '10px 20px', background: 'rgba(8,8,8,0.95)',
+        backdropFilter: 'blur(12px)',
+        borderBottom: '1px solid #1c1c1c',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0,
       }}>
         <img src="/Logo_Inklovers-2.png" alt="Ink Lovers" style={{ height: 48, objectFit: 'contain' }} />
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           {['it','en','de'].map(l => (
             <button key={l} onClick={() => setLang(l)} style={{
-              background: lang === l ? '#c8523a' : 'none',
-              border: `1px solid ${lang === l ? '#c8523a' : '#2a2a2a'}`,
-              borderRadius: 6, padding: '4px 10px',
-              fontFamily: 'DM Mono, monospace', fontSize: 11,
-              color: lang === l ? '#fff' : '#555', cursor: 'pointer',
-              textTransform: 'uppercase',
+              background: lang === l ? '#fff' : 'none',
+              border: `1px solid ${lang === l ? '#fff' : '#2a2a2a'}`,
+              borderRadius: 5, padding: '3px 8px',
+              fontFamily: 'DM Mono, monospace', fontSize: 10,
+              color: lang === l ? '#000' : '#444', cursor: 'pointer',
+              textTransform: 'uppercase', letterSpacing: '.06em', transition: 'all .2s',
             }}>{l}</button>
           ))}
           <button onClick={logout} style={{
             background: 'none', border: '1px solid #2a2a2a',
-            borderRadius: 6, padding: '4px 10px',
-            fontFamily: 'DM Mono, monospace', fontSize: 11, color: '#555', cursor: 'pointer',
+            borderRadius: 5, padding: '3px 8px', marginLeft: 4,
+            fontFamily: 'DM Mono, monospace', fontSize: 10,
+            color: '#444', cursor: 'pointer', letterSpacing: '.06em',
           }}>Esci</button>
         </div>
       </div>
@@ -69,13 +75,13 @@ function AppInner() {
       {/* User badge */}
       {userProfile && (
         <div style={{
-          padding: '6px 20px', background: '#111',
-          borderBottom: '1px solid #1e1e1e',
+          padding: '5px 20px', background: '#0d0d0d',
+          borderBottom: '1px solid #181818',
           display: 'flex', alignItems: 'center', gap: 8,
         }}>
-          <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#c8523a' }} />
-          <span style={{ fontSize: 11, fontFamily: 'DM Mono, monospace', color: '#555' }}>
-            {userProfile.name} · <span style={{ color: '#c8523a' }}>{userProfile.role}</span>
+          <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#fff', opacity: 0.3 }} />
+          <span style={{ fontSize: 10, fontFamily: 'DM Mono, monospace', color: '#444', letterSpacing: '.06em' }}>
+            {userProfile.name} · <span style={{ color: '#666' }}>{userProfile.role}</span>
           </span>
         </div>
       )}
@@ -93,17 +99,32 @@ function AppInner() {
       </div>
 
       {/* Bottom nav */}
-      <div style={{ background: '#111', borderTop: '1px solid #1e1e1e', display: 'flex', flexShrink: 0 }}>
+      <div style={{
+        background: 'rgba(8,8,8,0.97)',
+        backdropFilter: 'blur(12px)',
+        borderTop: '1px solid #1c1c1c',
+        display: 'flex', flexShrink: 0,
+      }}>
         {navItems.map(item => {
           const isActive = activeNavId === item.id;
           return (
             <button key={item.id} onClick={() => handleNavClick(item.id)} style={{
               flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
               gap: 4, background: 'none', border: 'none', padding: '10px 0 8px',
-              cursor: 'pointer', color: isActive ? '#c8523a' : '#555', transition: 'color .2s',
+              cursor: 'pointer',
+              color: isActive ? '#fff' : '#3a3a3a',
+              transition: 'color .2s',
+              position: 'relative',
             }}>
-              <div style={{ width: 22, height: 22 }}>{item.icon}</div>
-              <span style={{ fontSize: 10, fontFamily: 'DM Mono, monospace', letterSpacing: '.04em' }}>
+              {isActive && (
+                <div style={{
+                  position: 'absolute', top: 0, left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: 20, height: 1, background: '#fff',
+                }} />
+              )}
+              <div style={{ width: 20, height: 20 }}>{item.icon}</div>
+              <span style={{ fontSize: 9, fontFamily: 'DM Mono, monospace', letterSpacing: '.08em', textTransform: 'uppercase' }}>
                 {item.id === 'admin' ? 'Admin' : t(item.labelKey)}
               </span>
             </button>
@@ -115,9 +136,6 @@ function AppInner() {
 }
 
 export default function App() {
-  return (
-    <AuthProvider>
-      <AppInner />
-    </AuthProvider>
-  );
+  return <AuthProvider><AppInner /></AuthProvider>;
 }
+
