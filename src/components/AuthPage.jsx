@@ -12,9 +12,17 @@ export default function AuthPage({ t }) {
   const { login, register } = useAuth();
 
   const inputStyle = {
-    width: '100%', background: '#1c1c1c', border: '1px solid #2a2a2a',
-    borderRadius: 8, padding: '11px 14px', fontFamily: 'Syne, sans-serif',
-    fontSize: 14, color: '#f0ece4', outline: 'none', marginBottom: 12,
+    width: '100%',
+    background: '#1a1a1a',
+    border: '1px solid #252525',
+    borderRadius: 8,
+    padding: '12px 14px',
+    fontFamily: 'Syne, sans-serif',
+    fontSize: 14,
+    color: '#f5f5f5',
+    outline: 'none',
+    marginBottom: 12,
+    transition: 'border-color .2s',
   };
 
   const handleSubmit = async () => {
@@ -40,31 +48,48 @@ export default function AuthPage({ t }) {
 
   return (
     <div style={{
-      flex: 1, display: 'flex', flexDirection: 'column',
-      alignItems: 'center', justifyContent: 'center',
-      padding: 24, background: '#0e0e0e', minHeight: '100vh',
+      minHeight: '100vh',
+      background: '#080808',
+      backgroundImage: 'radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.04) 0%, transparent 65%)',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 24,
     }}>
-      {/* Logo */}
-      <img
-        src="/Logo_Inklovers-2.png"
-        alt="Ink Lovers"
-        style={{ width: 160, objectFit: 'contain', marginBottom: 32 }}
-      />
+      <div style={{ marginBottom: 8, textAlign: 'center' }}>
+        <img
+          src="/Logo_Inklovers-2.png"
+          alt="Ink Lovers"
+          style={{ width: 200, objectFit: 'contain' }}
+        />
+      </div>
 
       <div style={{
-        width: '100%', maxWidth: 340,
-        background: '#161616', border: '1px solid #1e1e1e',
-        borderRadius: 14, padding: 24,
+        width: 1,
+        height: 40,
+        background: 'linear-gradient(to bottom, #333, transparent)',
+        marginBottom: 32,
+      }} />
+
+      <div style={{
+        width: '100%',
+        maxWidth: 340,
+        background: '#111',
+        border: '1px solid #222',
+        borderRadius: 16,
+        padding: 24,
+        boxShadow: '0 0 60px rgba(0,0,0,.6)',
       }}>
-        {/* Tab login/registrati */}
-        <div style={{ display: 'flex', marginBottom: 20, background: '#1c1c1c', borderRadius: 8, padding: 3 }}>
+        <div style={{ display: 'flex', marginBottom: 24, background: '#1a1a1a', borderRadius: 10, padding: 3 }}>
           {['Accedi', 'Registrati'].map((label, i) => (
             <button key={i} onClick={() => setIsLogin(i === 0)} style={{
-              flex: 1, padding: '8px 0', border: 'none', borderRadius: 6,
+              flex: 1, padding: '9px 0', border: 'none', borderRadius: 8,
               fontFamily: 'Syne, sans-serif', fontSize: 13, fontWeight: 600,
-              background: isLogin === (i === 0) ? '#c8523a' : 'none',
-              color: isLogin === (i === 0) ? '#fff' : '#555',
+              background: isLogin === (i === 0) ? '#fff' : 'none',
+              color: isLogin === (i === 0) ? '#000' : '#555',
               transition: 'all .2s', cursor: 'pointer',
+              letterSpacing: '.03em',
             }}>{label}</button>
           ))}
         </div>
@@ -80,32 +105,25 @@ export default function AuthPage({ t }) {
             <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
               {['cliente', 'artista'].map(r => (
                 <button key={r} onClick={() => setRole(r)} style={{
-                  flex: 1, padding: '9px 0',
-                  border: `1px solid ${role === r ? '#c8523a' : '#2a2a2a'}`,
+                  flex: 1, padding: '10px 0',
+                  border: `1px solid ${role === r ? '#fff' : '#252525'}`,
                   borderRadius: 8,
-                  background: role === r ? '#c8523a' : '#1c1c1c',
-                  color: role === r ? '#fff' : '#666',
+                  background: role === r ? '#fff' : '#1a1a1a',
+                  color: role === r ? '#000' : '#555',
                   fontSize: 13, fontFamily: 'Syne, sans-serif',
                   fontWeight: 600, textTransform: 'capitalize', cursor: 'pointer',
+                  transition: 'all .2s',
                 }}>{r}</button>
               ))}
             </div>
           </>
         )}
 
-        <input
-          type="email" placeholder="Email"
-          value={email} onChange={e => setEmail(e.target.value)}
-          style={inputStyle}
-        />
-        <input
-          type="password" placeholder="Password"
-          value={password} onChange={e => setPassword(e.target.value)}
-          style={inputStyle}
-        />
+        <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} style={inputStyle} />
+        <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} style={inputStyle} />
 
         {error && (
-          <div style={{ fontSize: 12, color: '#c8523a', marginBottom: 12, textAlign: 'center' }}>
+          <div style={{ fontSize: 12, color: '#aaa', marginBottom: 12, textAlign: 'center', fontFamily: 'DM Mono, monospace' }}>
             {error}
           </div>
         )}
@@ -114,12 +132,17 @@ export default function AuthPage({ t }) {
           onClick={handleSubmit}
           disabled={loading}
           style={{
-            width: '100%', padding: 13, background: '#c8523a',
-            color: '#fff', border: 'none', borderRadius: 10,
+            width: '100%', padding: 14, background: '#fff',
+            color: '#000', border: 'none', borderRadius: 10,
             fontFamily: 'Syne, sans-serif', fontSize: 14, fontWeight: 700,
             opacity: loading ? 0.6 : 1, cursor: loading ? 'not-allowed' : 'pointer',
+            letterSpacing: '.05em', transition: 'opacity .2s',
           }}
         >{loading ? '...' : isLogin ? 'Entra' : 'Crea account'}</button>
+      </div>
+
+      <div style={{ marginTop: 32, fontSize: 10, fontFamily: 'DM Mono, monospace', color: '#2a2a2a', letterSpacing: '.15em' }}>
+        INK LOVERS STUDIO
       </div>
     </div>
   );
