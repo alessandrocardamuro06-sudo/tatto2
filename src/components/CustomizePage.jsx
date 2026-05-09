@@ -13,141 +13,129 @@ export default function CustomizePage({ t }) {
   const zoneOptions = t('zone-options') || [];
   const sizeOptions = t('size-options') || [];
 
-  const toggleStyle = (s) => {
-    setSelectedStyles(prev =>
-      prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s]
-    );
-  };
+  const toggleStyle = (s) => setSelectedStyles(prev => prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s]);
 
   const generateSuggestion = async () => {
     const stylesStr = selectedStyles.join(', ') || 'non specificato';
-    setLoading(true);
-    setAiResult(null);
+    setLoading(true); setAiResult(null);
     try {
       const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
+          model: 'claude-sonnet-4-20250514', max_tokens: 1000,
           system: t('ai-system'),
-          messages: [{
-            role: 'user',
-            content: `Stile: ${stylesStr}. Zona: ${zone || 'non specificata'}. Dimensione: ${size || 'non specificata'}. Idea: ${idea || 'libera'}.`,
-          }],
+          messages: [{ role: 'user', content: `Stile: ${stylesStr}. Zona: ${zone || 'non specificata'}. Dimensione: ${size || 'non specificata'}. Idea: ${idea || 'libera'}.` }],
         }),
       });
       const data = await res.json();
-      const text = data.content?.map(c => c.text || '').join('') || t('ai-error');
-      setAiResult(text);
-    } catch {
-      setAiResult(t('ai-error'));
-    } finally {
-      setLoading(false);
-    }
+      setAiResult(data.content?.map(c => c.text || '').join('') || t('ai-error'));
+    } catch { setAiResult(t('ai-error')); }
+    setLoading(false);
   };
 
   const inputStyle = {
-    width: '100%', background: '#161616', border: '1px solid #2a2a2a',
-    borderRadius: 7, padding: '8px 10px', fontFamily: 'Syne, sans-serif',
-    fontSize: 13, color: '#f0ece4', outline: 'none',
+    width: '100%', background: 'rgba(255,255,255,0.02)',
+    border: '1px solid rgba(255,255,255,0.07)', borderRadius: 8,
+    padding: '10px 12px', fontFamily: 'Syne, sans-serif', fontSize: 13,
+    color: '#f0ece4', outline: 'none',
   };
 
   return (
-    <div style={{ padding: 20 }}>
+    <div style={{ padding: '20px 18px' }}>
+      <div style={{ marginBottom: 24 }}>
+        <h1 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 28, fontWeight: 300, color: '#f0ece4', letterSpacing: '.02em', fontStyle: 'italic', marginBottom: 6 }}>
+          {t('nav-create')}
+        </h1>
+        <div style={{ width: 30, height: 1, background: 'linear-gradient(to right, rgba(255,255,255,0.3), transparent)' }} />
+      </div>
+
       {/* AI Box */}
-      <div style={{
-        background: '#161616', border: '1px solid #2a2a2a',
-        borderRadius: 12, padding: 16, marginBottom: 16,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, fontFamily: 'DM Mono, monospace', color: '#c8523a', textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: 10 }}>
-          <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#c8523a' }} />
-          {t('ai-label')}
+      <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 14, padding: 18, marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+          <div style={{ width: 5, height: 5, borderRadius: '50%', background: loading ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.15)', transition: 'background .3s' }} />
+          <div style={{ fontSize: 8, fontFamily: 'DM Mono, monospace', color: '#333', textTransform: 'uppercase', letterSpacing: '.15em' }}>
+            {t('ai-label')}
+          </div>
         </div>
         <div style={{
-          background: '#1c1c1c', border: '1px solid #222', borderRadius: 8,
-          padding: 12, fontSize: 13, lineHeight: 1.7, minHeight: 60,
-          color: loading ? '#555' : (aiResult ? '#f0ece4' : '#666'),
-          fontStyle: aiResult && !loading ? 'italic' : 'normal',
+          minHeight: 64, fontSize: 14, lineHeight: 1.8,
+          color: loading ? '#2a2a2a' : aiResult ? '#888' : '#222',
+          fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', letterSpacing: '.01em',
+          transition: 'color .3s',
         }}>
           {loading ? t('ai-loading') : (aiResult || t('ai-placeholder'))}
         </div>
       </div>
 
-      {/* Upload zone */}
+      {/* Upload */}
       <div style={{
-        border: '1px dashed #2a2a2a', borderRadius: 10, padding: 22,
-        textAlign: 'center', background: '#161616', cursor: 'pointer', marginBottom: 14,
+        border: '1px dashed rgba(255,255,255,0.08)', borderRadius: 12, padding: 24,
+        textAlign: 'center', cursor: 'pointer', marginBottom: 20, transition: 'border-color .2s',
       }}>
-        <p style={{ fontSize: 13, color: '#666', marginBottom: 4 }}>{t('upload-text')}</p>
-        <small style={{ fontSize: 11, fontFamily: 'DM Mono, monospace', color: '#444' }}>jpg · png · pdf — max 10mb</small>
+        <div style={{ fontSize: 12, color: '#333', marginBottom: 4, fontFamily: 'Syne, sans-serif', letterSpacing: '.04em' }}>{t('upload-text')}</div>
+        <div style={{ fontSize: 9, fontFamily: 'DM Mono, monospace', color: '#1e1e1e', letterSpacing: '.08em' }}>jpg · png · pdf · max 10mb</div>
       </div>
 
-      {/* Style label */}
-      <div style={{ fontSize: 10, fontFamily: 'DM Mono, monospace', color: '#555', textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: 8 }}>
+      {/* Style */}
+      <div style={{ fontSize: 8, fontFamily: 'DM Mono, monospace', color: '#2a2a2a', textTransform: 'uppercase', letterSpacing: '.15em', marginBottom: 10 }}>
         {t('style-label')}
       </div>
-
-      {/* Style tags */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 20 }}>
         {STYLES.map(s => (
-          <button
-            key={s}
-            onClick={() => toggleStyle(s)}
-            style={{
-              padding: '6px 12px', borderRadius: 999,
-              border: `1px solid ${selectedStyles.includes(s) ? '#c8523a' : '#2a2a2a'}`,
-              fontSize: 12, cursor: 'pointer', transition: 'all .2s',
-              background: selectedStyles.includes(s) ? '#c8523a' : '#161616',
-              color: selectedStyles.includes(s) ? '#fff' : '#888',
-              fontFamily: 'Syne, sans-serif',
-            }}
-          >{s}</button>
+          <button key={s} onClick={() => toggleStyle(s)} style={{
+            padding: '6px 13px', borderRadius: 999,
+            border: `1px solid ${selectedStyles.includes(s) ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.07)'}`,
+            fontSize: 11, cursor: 'pointer', transition: 'all .2s',
+            background: selectedStyles.includes(s) ? 'rgba(255,255,255,0.08)' : 'transparent',
+            color: selectedStyles.includes(s) ? 'rgba(255,255,255,0.7)' : '#333',
+            fontFamily: 'Syne, sans-serif', letterSpacing: '.04em',
+          }}>{s}</button>
         ))}
       </div>
 
       {/* Form */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 14 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20 }}>
         <div>
-          <label style={{ display: 'block', fontSize: 10, fontFamily: 'DM Mono, monospace', color: '#555', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 5 }}>{t('zone-label')}</label>
+          <div style={{ fontSize: 8, fontFamily: 'DM Mono, monospace', color: '#2a2a2a', textTransform: 'uppercase', letterSpacing: '.12em', marginBottom: 6 }}>{t('zone-label')}</div>
           <select style={inputStyle} value={zone} onChange={e => setZone(e.target.value)}>
             {zoneOptions.map((o, i) => <option key={i}>{o}</option>)}
           </select>
         </div>
         <div>
-          <label style={{ display: 'block', fontSize: 10, fontFamily: 'DM Mono, monospace', color: '#555', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 5 }}>{t('size-label')}</label>
+          <div style={{ fontSize: 8, fontFamily: 'DM Mono, monospace', color: '#2a2a2a', textTransform: 'uppercase', letterSpacing: '.12em', marginBottom: 6 }}>{t('size-label')}</div>
           <select style={inputStyle} value={size} onChange={e => setSize(e.target.value)}>
             {sizeOptions.map((o, i) => <option key={i}>{o}</option>)}
           </select>
         </div>
         <div style={{ gridColumn: '1 / -1' }}>
-          <label style={{ display: 'block', fontSize: 10, fontFamily: 'DM Mono, monospace', color: '#555', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 5 }}>{t('idea-label')}</label>
+          <div style={{ fontSize: 8, fontFamily: 'DM Mono, monospace', color: '#2a2a2a', textTransform: 'uppercase', letterSpacing: '.12em', marginBottom: 6 }}>{t('idea-label')}</div>
           <textarea
-            style={{ ...inputStyle, resize: 'none', height: 68, lineHeight: 1.5 }}
-            placeholder={t('idea-placeholder')}
-            value={idea}
-            onChange={e => setIdea(e.target.value)}
+            style={{ ...inputStyle, resize: 'none', height: 72, lineHeight: 1.6 }}
+            placeholder={t('idea-placeholder')} value={idea} onChange={e => setIdea(e.target.value)}
           />
         </div>
       </div>
 
-      <button
-        onClick={generateSuggestion}
-        disabled={loading}
-        style={{
-          width: '100%', padding: 12, background: '#1c1c1c',
-          border: '1px solid #c8523a', color: '#c8523a', borderRadius: 8,
-          fontSize: 13, fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer',
-          marginBottom: 10, opacity: loading ? 0.6 : 1,
-          fontFamily: 'Syne, sans-serif',
-        }}
-      >{t('gen-btn')}</button>
+      <button onClick={generateSuggestion} disabled={loading} style={{
+        width: '100%', padding: 13, marginBottom: 10,
+        background: 'transparent',
+        border: '1px solid rgba(255,255,255,0.12)',
+        borderRadius: 10, fontSize: 11, fontWeight: 600,
+        color: loading ? '#2a2a2a' : 'rgba(255,255,255,0.4)',
+        cursor: loading ? 'not-allowed' : 'pointer',
+        fontFamily: 'DM Mono, monospace', letterSpacing: '.12em',
+        textTransform: 'uppercase', transition: 'all .25s',
+      }}>{loading ? '· · ·' : t('gen-btn')}</button>
 
       <button style={{
-        width: '100%', padding: 13, background: '#c8523a', color: '#fff',
-        border: 'none', borderRadius: 10, fontSize: 13, fontWeight: 700,
-        letterSpacing: '.04em', fontFamily: 'Syne, sans-serif',
+        width: '100%', padding: 14,
+        background: 'rgba(255,255,255,0.9)', color: '#0a0a0a',
+        border: 'none', borderRadius: 10, fontSize: 12, fontWeight: 700,
+        letterSpacing: '.1em', fontFamily: 'Syne, sans-serif', cursor: 'pointer',
+        textTransform: 'uppercase', transition: 'opacity .2s',
       }}>{t('send-artists')}</button>
     </div>
   );
 }
+
