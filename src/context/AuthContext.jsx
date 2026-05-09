@@ -10,6 +10,12 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [dots, setDots] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => setDots(d => (d + 1) % 3), 500);
+    return () => clearInterval(interval);
+  }, []);
 
   async function register(email, password, name, role) {
     const result = await createUserWithEmailAndPassword(auth, email, password);
@@ -40,21 +46,20 @@ export function AuthProvider({ children }) {
   if (loading) {
     return (
       <div style={{
-        height: '100vh',
-        background: '#080808',
-        backgroundImage: 'radial-gradient(ellipse at 50% 30%, rgba(255,255,255,0.05) 0%, transparent 60%)',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 28,
+        height: '100vh', background: '#070707',
+        backgroundImage: 'radial-gradient(ellipse 100% 50% at 50% -10%, rgba(255,255,255,0.05) 0%, transparent 100%)',
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center', gap: 32,
       }}>
-        <img src="/Logo_Inklovers-2.png" alt="Ink Lovers" style={{ width: 200, objectFit: 'contain', opacity: 0.95 }} />
-        <div style={{ display: 'flex', gap: 6 }}>
+        <img src="/Logo_Inklovers-2.png" alt="Ink Lovers" style={{ width: 200, objectFit: 'contain' }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {[0,1,2].map(i => (
             <div key={i} style={{
-              width: 4, height: 4, borderRadius: '50%',
-              background: i === 0 ? '#fff' : i === 1 ? '#888' : '#333',
+              width: i === dots ? 20 : 4,
+              height: 1,
+              background: i === dots ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.1)',
+              borderRadius: 1,
+              transition: 'all .4s ease',
             }} />
           ))}
         </div>
