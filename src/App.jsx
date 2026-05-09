@@ -9,11 +9,59 @@ import AuthPage from './components/AuthPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 const NAV_ITEMS = [
-  { id: 'feed', labelKey: 'nav-home', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> },
-  { id: 'artists', labelKey: 'nav-artists', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> },
-  { id: 'custom', labelKey: 'nav-create', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> },
-  { id: 'booking', labelKey: 'nav-booking', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> },
+  {
+    id: 'feed', labelKey: 'nav-home',
+    icon: (active) => (
+      <svg viewBox="0 0 32 32" fill="none" style={{width:26,height:26}}>
+        <path d="M6 13L16 4L26 13V27C26 27.6 25.6 28 25 28H20V20H12V28H7C6.4 28 6 27.6 6 27V13Z"
+          stroke={active ? '#fff' : '#3a3a3a'} strokeWidth="1.2" fill={active ? 'rgba(255,255,255,0.08)' : 'none'} strokeLinejoin="round"/>
+      </svg>
+    )
+  },
+  {
+    id: 'artists', labelKey: 'nav-artists',
+    icon: (active) => (
+      <svg viewBox="0 0 32 32" fill="none" style={{width:26,height:26}}>
+        <circle cx="12" cy="10" r="4.5" stroke={active ? '#fff' : '#3a3a3a'} strokeWidth="1.2"/>
+        <path d="M4 26C4 21.6 7.6 18 12 18C14.2 18 16.2 18.9 17.6 20.4" stroke={active ? '#fff' : '#3a3a3a'} strokeWidth="1.2" strokeLinecap="round"/>
+        <circle cx="22" cy="20" r="5.5" stroke={active ? '#fff' : '#3a3a3a'} strokeWidth="1.2" fill={active ? 'rgba(255,255,255,0.08)' : 'none'}/>
+        <path d="M22 17V20L24 22" stroke={active ? '#fff' : '#3a3a3a'} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    )
+  },
+  {
+    id: 'custom', labelKey: 'nav-create',
+    icon: (active) => (
+      <svg viewBox="0 0 32 32" fill="none" style={{width:26,height:26}}>
+        <path d="M22 5L27 10L12 25L5 27L7 20L22 5Z" stroke={active ? '#fff' : '#3a3a3a'} strokeWidth="1.2" strokeLinejoin="round" fill={active ? 'rgba(255,255,255,0.08)' : 'none'}/>
+        <path d="M19 8L24 13" stroke={active ? '#fff' : '#3a3a3a'} strokeWidth="1.2"/>
+        <path d="M5 27L7 20" stroke={active ? '#fff' : '#3a3a3a'} strokeWidth="1.2" strokeLinecap="round"/>
+      </svg>
+    )
+  },
+  {
+    id: 'booking', labelKey: 'nav-booking',
+    icon: (active) => (
+      <svg viewBox="0 0 32 32" fill="none" style={{width:26,height:26}}>
+        <rect x="5" y="7" width="22" height="20" rx="2" stroke={active ? '#fff' : '#3a3a3a'} strokeWidth="1.2" fill={active ? 'rgba(255,255,255,0.08)' : 'none'}/>
+        <path d="M5 13H27" stroke={active ? '#fff' : '#3a3a3a'} strokeWidth="1.2"/>
+        <path d="M11 5V9M21 5V9" stroke={active ? '#fff' : '#3a3a3a'} strokeWidth="1.2" strokeLinecap="round"/>
+        <path d="M10 19H16M10 23H13" stroke={active ? '#fff' : '#3a3a3a'} strokeWidth="1.2" strokeLinecap="round"/>
+      </svg>
+    )
+  },
 ];
+
+const ADMIN_ITEM = {
+  id: 'admin', labelKey: 'nav-admin',
+  icon: (active) => (
+    <svg viewBox="0 0 32 32" fill="none" style={{width:26,height:26}}>
+      <path d="M16 4L26 9V16C26 21.5 21.6 26.6 16 28C10.4 26.6 6 21.5 6 16V9L16 4Z"
+        stroke={active ? '#fff' : '#3a3a3a'} strokeWidth="1.2" strokeLinejoin="round" fill={active ? 'rgba(255,255,255,0.08)' : 'none'}/>
+      <path d="M12 16L15 19L21 13" stroke={active ? '#fff' : '#3a3a3a'} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  )
+};
 
 function AppInner() {
   const { currentUser, userProfile, logout } = useAuth();
@@ -27,9 +75,7 @@ function AppInner() {
   if (!currentUser) return <AuthPage t={t} />;
 
   const isAdmin = userProfile?.role === 'admin';
-  const navItems = isAdmin
-    ? [...NAV_ITEMS, { id: 'admin', labelKey: 'nav-admin', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg> }]
-    : NAV_ITEMS;
+  const navItems = isAdmin ? [...NAV_ITEMS, ADMIN_ITEM] : NAV_ITEMS;
 
   const handleSelectArtist = (id) => { setSelectedArtistId(id); setPage('profile'); };
   const handleBookArtist = (name) => { setPreselectedArtist(name); setPage('booking'); };
@@ -40,48 +86,56 @@ function AppInner() {
     <div style={{
       maxWidth: 480, margin: '0 auto', height: '100vh',
       display: 'flex', flexDirection: 'column',
-      background: '#080808',
-      backgroundImage: 'radial-gradient(ellipse at 30% 0%, rgba(255,255,255,0.03) 0%, transparent 50%), radial-gradient(ellipse at 70% 100%, rgba(255,255,255,0.02) 0%, transparent 50%)',
+      background: '#070707',
+      backgroundImage: 'radial-gradient(ellipse 100% 40% at 50% -5%, rgba(255,255,255,0.04) 0%, transparent 100%)',
     }}>
 
       {/* Topbar */}
       <div style={{
-        padding: '10px 20px', background: 'rgba(8,8,8,0.95)',
-        backdropFilter: 'blur(12px)',
-        borderBottom: '1px solid #1c1c1c',
+        padding: '8px 20px 8px',
+        background: 'rgba(7,7,7,0.92)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(255,255,255,0.05)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0,
       }}>
-        <img src="/Logo_Inklovers-2.png" alt="Ink Lovers" style={{ height: 48, objectFit: 'contain' }} />
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <img src="/Logo_Inklovers-2.png" alt="Ink Lovers" style={{ height: 44, objectFit: 'contain' }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
           {['it','en','de'].map(l => (
             <button key={l} onClick={() => setLang(l)} style={{
-              background: lang === l ? '#fff' : 'none',
-              border: `1px solid ${lang === l ? '#fff' : '#2a2a2a'}`,
-              borderRadius: 5, padding: '3px 8px',
-              fontFamily: 'DM Mono, monospace', fontSize: 10,
-              color: lang === l ? '#000' : '#444', cursor: 'pointer',
-              textTransform: 'uppercase', letterSpacing: '.06em', transition: 'all .2s',
+              background: lang === l ? 'rgba(255,255,255,0.1)' : 'none',
+              border: `1px solid ${lang === l ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.06)'}`,
+              borderRadius: 4, padding: '3px 7px',
+              fontFamily: 'DM Mono, monospace', fontSize: 9,
+              color: lang === l ? '#fff' : '#444', cursor: 'pointer',
+              textTransform: 'uppercase', letterSpacing: '.1em', transition: 'all .2s',
             }}>{l}</button>
           ))}
+          <div style={{ width: 1, height: 14, background: '#222', margin: '0 4px' }} />
           <button onClick={logout} style={{
-            background: 'none', border: '1px solid #2a2a2a',
-            borderRadius: 5, padding: '3px 8px', marginLeft: 4,
-            fontFamily: 'DM Mono, monospace', fontSize: 10,
-            color: '#444', cursor: 'pointer', letterSpacing: '.06em',
+            background: 'none', border: 'none', padding: '3px 0',
+            fontFamily: 'DM Mono, monospace', fontSize: 9,
+            color: '#333', cursor: 'pointer', letterSpacing: '.1em',
+            textTransform: 'uppercase', transition: 'color .2s',
           }}>Esci</button>
         </div>
       </div>
 
-      {/* User badge */}
+      {/* User ribbon */}
       {userProfile && (
         <div style={{
-          padding: '5px 20px', background: '#0d0d0d',
-          borderBottom: '1px solid #181818',
+          padding: '4px 20px',
+          background: 'rgba(255,255,255,0.015)',
+          borderBottom: '1px solid rgba(255,255,255,0.04)',
           display: 'flex', alignItems: 'center', gap: 8,
         }}>
-          <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#fff', opacity: 0.3 }} />
-          <span style={{ fontSize: 10, fontFamily: 'DM Mono, monospace', color: '#444', letterSpacing: '.06em' }}>
-            {userProfile.name} · <span style={{ color: '#666' }}>{userProfile.role}</span>
+          <div style={{ width: 5, height: 5, borderRadius: '50%', background: 'rgba(255,255,255,0.2)' }} />
+          <span style={{ fontSize: 9, fontFamily: 'DM Mono, monospace', color: '#333', letterSpacing: '.1em', textTransform: 'uppercase' }}>
+            {userProfile.name}
+          </span>
+          <div style={{ width: 1, height: 8, background: '#222' }} />
+          <span style={{ fontSize: 9, fontFamily: 'DM Mono, monospace', color: '#444', letterSpacing: '.1em', textTransform: 'uppercase' }}>
+            {userProfile.role}
           </span>
         </div>
       )}
@@ -98,33 +152,39 @@ function AppInner() {
         {page === 'admin' && isAdmin && <AdminPage t={t} />}
       </div>
 
-      {/* Bottom nav */}
+      {/* Bottom nav — sophisticated */}
       <div style={{
-        background: 'rgba(8,8,8,0.97)',
-        backdropFilter: 'blur(12px)',
-        borderTop: '1px solid #1c1c1c',
+        background: 'rgba(7,7,7,0.97)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderTop: '1px solid rgba(255,255,255,0.05)',
         display: 'flex', flexShrink: 0,
+        padding: '2px 0 0',
       }}>
         {navItems.map(item => {
           const isActive = activeNavId === item.id;
           return (
             <button key={item.id} onClick={() => handleNavClick(item.id)} style={{
               flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
-              gap: 4, background: 'none', border: 'none', padding: '10px 0 8px',
-              cursor: 'pointer',
-              color: isActive ? '#fff' : '#3a3a3a',
-              transition: 'color .2s',
-              position: 'relative',
+              gap: 3, background: 'none', border: 'none',
+              padding: '10px 0 10px',
+              cursor: 'pointer', position: 'relative', transition: 'opacity .2s',
             }}>
               {isActive && (
                 <div style={{
                   position: 'absolute', top: 0, left: '50%',
                   transform: 'translateX(-50%)',
-                  width: 20, height: 1, background: '#fff',
+                  width: 24, height: 1,
+                  background: 'linear-gradient(to right, transparent, #fff, transparent)',
                 }} />
               )}
-              <div style={{ width: 20, height: 20 }}>{item.icon}</div>
-              <span style={{ fontSize: 9, fontFamily: 'DM Mono, monospace', letterSpacing: '.08em', textTransform: 'uppercase' }}>
+              {item.icon(isActive)}
+              <span style={{
+                fontSize: 8, fontFamily: 'DM Mono, monospace',
+                letterSpacing: '.12em', textTransform: 'uppercase',
+                color: isActive ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.15)',
+                transition: 'color .2s',
+              }}>
                 {item.id === 'admin' ? 'Admin' : t(item.labelKey)}
               </span>
             </button>
@@ -138,4 +198,5 @@ function AppInner() {
 export default function App() {
   return <AuthProvider><AppInner /></AuthProvider>;
 }
+
 
