@@ -1,4 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { db } from './firebase';
+import { doc, onSnapshot } from 'firebase/firestore';
 import LANGS from './data/translations';
 import FeedPage from './components/FeedPage';
 import { ArtistsPage, ArtistProfile } from './components/ArtistsPage';
@@ -42,14 +44,12 @@ function Sidebar({ open, onClose, onNavigate, onLogout, userProfile, t, isAdmin,
     <>
       <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)', opacity: open ? 1 : 0, pointerEvents: open ? 'auto' : 'none', transition: 'opacity .3s ease' }} />
       <div style={{ position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 101, width: 280, background: '#0a0a0a', borderRight: '1px solid rgba(255,255,255,0.06)', transform: open ? 'translateX(0)' : 'translateX(-100%)', transition: 'transform .32s cubic-bezier(.4,0,.2,1)', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
-        {/* Header */}
         <div style={{ padding: '52px 24px 24px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
           <div style={{ width: 52, height: 52, borderRadius: 14, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Cormorant Garamond, serif', fontSize: 20, color: 'rgba(255,255,255,0.5)', marginBottom: 12, fontStyle: 'italic' }}>
             {userProfile?.name?.slice(0, 2).toUpperCase() || '?'}
           </div>
           <div style={{ fontFamily: 'Syne, sans-serif', fontSize: 15, color: '#e8e4dc', fontWeight: 600, marginBottom: 3 }}>{userProfile?.name || ''}</div>
           <div style={{ fontSize: 10, fontFamily: 'DM Mono, monospace', color: '#333', letterSpacing: '.12em', textTransform: 'uppercase', marginBottom: 10 }}>{userProfile?.email || ''}</div>
-          {/* Credits badge in sidebar */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 999, border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.03)' }}>
               <div style={{ width: 5, height: 5, borderRadius: '50%', background: 'rgba(255,255,255,0.2)' }} />
@@ -62,7 +62,6 @@ function Sidebar({ open, onClose, onNavigate, onLogout, userProfile, t, isAdmin,
           </div>
         </div>
 
-        {/* Nav */}
         <div style={{ padding: '16px 12px', flex: 1 }}>
           <div style={{ fontSize: 8, fontFamily: 'DM Mono, monospace', color: '#222', letterSpacing: '.2em', textTransform: 'uppercase', padding: '0 12px', marginBottom: 8 }}>Navigazione</div>
           {navItems.map(item => {
@@ -78,15 +77,16 @@ function Sidebar({ open, onClose, onNavigate, onLogout, userProfile, t, isAdmin,
           <div style={{ height: 1, background: 'rgba(255,255,255,0.04)', margin: '16px 12px' }} />
           <div style={{ fontSize: 8, fontFamily: 'DM Mono, monospace', color: '#222', letterSpacing: '.2em', textTransform: 'uppercase', padding: '0 12px', marginBottom: 8 }}>Account</div>
 
-          <button onClick={() => { onNavigate('profile-user'); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '11px 12px', borderRadius: 10, border: 'none', background: 'transparent', color: '#444', cursor: 'pointer', marginBottom: 2, fontFamily: 'Syne, sans-serif', fontSize: 13, letterSpacing: '.02em', transition: 'all .2s', textAlign: 'left', borderLeft: '2px solid transparent' }}>
+          <button onClick={() => { onNavigate('profile-user'); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '11px 12px', borderRadius: 10, border: 'none', background: 'transparent', color: '#444', cursor: 'pointer', marginBottom: 2, fontFamily: 'Syne, sans-serif', fontSize: 13, letterSpacing: '.02em', textAlign: 'left', borderLeft: '2px solid transparent' }}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" style={{width:18,height:18,color:'#2a2a2a'}}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
             Il mio profilo
           </button>
-          <button onClick={() => { onLogout(); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '11px 12px', borderRadius: 10, border: 'none', background: 'transparent', color: '#333', cursor: 'pointer', fontFamily: 'Syne, sans-serif', fontSize: 13, letterSpacing: '.02em', transition: 'all .2s', textAlign: 'left', borderLeft: '2px solid transparent' }}>
+          <button onClick={() => { onLogout(); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '11px 12px', borderRadius: 10, border: 'none', background: 'transparent', color: '#333', cursor: 'pointer', fontFamily: 'Syne, sans-serif', fontSize: 13, letterSpacing: '.02em', textAlign: 'left', borderLeft: '2px solid transparent' }}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" style={{width:18,height:18,color:'#2a2a2a'}}><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             Esci
           </button>
         </div>
+
         <div style={{ padding: '16px 24px', borderTop: '1px solid rgba(255,255,255,0.04)' }}>
           <div style={{ fontSize: 8, fontFamily: 'DM Mono, monospace', color: '#1e1e1e', letterSpacing: '.18em', textTransform: 'uppercase' }}>Ink Lovers Studio</div>
         </div>
@@ -117,7 +117,6 @@ function UserProfilePage({ onBack, userProfile, credits }) {
           </div>
         </div>
       </div>
-      {/* Credits highlight */}
       <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 14, padding: '20px', marginBottom: 12, textAlign: 'center' }}>
         <div style={{ fontSize: 8, fontFamily: 'DM Mono, monospace', color: '#2a2a2a', textTransform: 'uppercase', letterSpacing: '.2em', marginBottom: 8 }}>I tuoi crediti</div>
         <div style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 48, fontWeight: 300, color: '#f0ece4', lineHeight: 1 }}>{credits}</div>
@@ -143,11 +142,8 @@ function AppInner() {
 
   const t = useCallback((key) => LANGS[lang]?.[key] ?? LANGS['it']?.[key] ?? key, [lang]);
 
-  // Carica crediti in tempo reale
   useEffect(() => {
     if (!currentUser) return;
-    const { doc, onSnapshot } = require('firebase/firestore');
-    const { db } = require('./firebase');
     const unsub = onSnapshot(doc(db, 'users', currentUser.uid), (snap) => {
       if (snap.exists()) setUserCredits(snap.data().credits || 0);
     });
@@ -166,6 +162,7 @@ function AppInner() {
 
   return (
     <div style={{ maxWidth: 480, margin: '0 auto', height: '100vh', display: 'flex', flexDirection: 'column', background: '#070707', backgroundImage: 'radial-gradient(ellipse 100% 40% at 50% -5%, rgba(255,255,255,0.04) 0%, transparent 100%)', overflow: 'hidden' }}>
+
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} onNavigate={handleNavClick} onLogout={logout} userProfile={userProfile} t={t} isAdmin={isAdmin} currentPage={page} credits={userCredits} />
 
       {/* Topbar */}
