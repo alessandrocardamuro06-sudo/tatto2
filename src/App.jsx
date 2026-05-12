@@ -36,7 +36,7 @@ function Sidebar({ open, onClose, onNavigate, onLogout, userProfile, t, isAdmin,
     { id: 'artists', label: t('nav-artists'), icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" style={{width:18,height:18}}><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> },
     { id: 'custom', label: t('nav-create'), icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" style={{width:18,height:18}}><path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg> },
     { id: 'booking', label: t('nav-booking'), icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" style={{width:18,height:18}}><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> },
-    { id: 'credits', label: 'Crediti', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" style={{width:18,height:18}}><circle cx="12" cy="12" r="9"/><path d="M12 7V17M9.5 9.5C9.5 8.4 10.6 7.5 12 7.5C13.4 7.5 14.5 8.4 14.5 9.5C14.5 11.5 9.5 11.5 9.5 13.5C9.5 14.6 10.6 15.5 12 15.5C13.4 15.5 14.5 14.6 14.5 13.5" strokeLinecap="round"/></svg> },
+    { id: 'credits', label: 'Premi', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" style={{width:18,height:18}}><circle cx="12" cy="12" r="9"/><path d="M12 7V17M9.5 9.5C9.5 8.4 10.6 7.5 12 7.5C13.4 7.5 14.5 8.4 14.5 9.5C14.5 11.5 9.5 11.5 9.5 13.5C9.5 14.6 10.6 15.5 12 15.5C13.4 15.5 14.5 14.6 14.5 13.5" strokeLinecap="round"/></svg> },
     ...(isAdmin ? [{ id: 'admin', label: 'Admin', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" style={{width:18,height:18}}><path d="M12 2L22 7v6c0 5.25-4.5 10.14-10 11.5C6.5 23.14 2 18.25 2 13V7l10-5z"/><path d="M9 12l2 2 4-4"/></svg> }] : []),
   ];
 
@@ -172,7 +172,29 @@ function AppInner() {
           <div style={{ width: 16, height: 1, background: 'rgba(255,255,255,0.2)', borderRadius: 1 }} />
           <div style={{ width: 19, height: 1, background: 'rgba(255,255,255,0.15)', borderRadius: 1 }} />
         </button>
-        <img src="/Logo_Inklovers-2.png" alt="Ink Lovers" style={{ height: 44, objectFit: 'contain', justifySelf: 'center' }} />
+        {/* Logo + credits badge centrati insieme */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, justifySelf: 'center' }}>
+          <button
+            onClick={() => handleNavClick('credits')}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 5,
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              borderRadius: 20, padding: '5px 10px',
+              cursor: 'pointer', transition: 'all .2s',
+            }}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.3" style={{width:13,height:13}}>
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 7V17M9.5 9.5C9.5 8.4 10.6 7.5 12 7.5C13.4 7.5 14.5 8.4 14.5 9.5C14.5 11.5 9.5 11.5 9.5 13.5C9.5 14.6 10.6 15.5 12 15.5C13.4 15.5 14.5 14.6 14.5 13.5" strokeLinecap="round"/>
+            </svg>
+            <span style={{
+              fontFamily: 'Cormorant Garamond, serif', fontSize: 15,
+              color: 'rgba(255,255,255,0.5)', fontStyle: 'italic', lineHeight: 1,
+            }}>{userCredits}</span>
+          </button>
+          <img src="/Logo_Inklovers-2.png" alt="Ink Lovers" style={{ height: 44, objectFit: 'contain' }} />
+        </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 4, justifySelf: 'end' }}>
           {['it','en','de'].map(l => (
             <button key={l} onClick={() => setLang(l)} style={{ background: lang===l ? 'rgba(255,255,255,0.1)' : 'none', border: `1px solid ${lang===l ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.06)'}`, borderRadius: 4, padding: '3px 7px', fontFamily: 'DM Mono, monospace', fontSize: 9, color: lang===l ? '#fff' : '#333', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '.1em', transition: 'all .2s' }}>{l}</button>
@@ -201,7 +223,7 @@ function AppInner() {
               {isActive && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: 24, height: 1, background: 'linear-gradient(to right, transparent, #fff, transparent)' }} />}
               {item.icon(isActive)}
               <span style={{ fontSize: 8, fontFamily: 'DM Mono, monospace', letterSpacing: '.12em', textTransform: 'uppercase', color: isActive ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.15)', transition: 'color .2s' }}>
-                {item.id === 'admin' ? 'Admin' : item.id === 'credits' ? 'Crediti' : t(item.labelKey)}
+                {item.id === 'admin' ? 'Admin' : item.id === 'credits' ? 'Premi' : t(item.labelKey)}
               </span>
             </button>
           );
@@ -214,5 +236,4 @@ function AppInner() {
 export default function App() {
   return <AuthProvider><AppInner /></AuthProvider>;
 }
-
 
