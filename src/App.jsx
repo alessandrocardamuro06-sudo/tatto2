@@ -12,16 +12,16 @@ import AuthPage from './components/AuthPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 const NAV_ITEMS = [
-  { id: 'feed', labelKey: 'nav-home', icon: (active) => (<svg viewBox="0 0 32 32" fill="none" style={{width:26,height:26}}><path d="M6 13L16 4L26 13V27C26 27.6 25.6 28 25 28H20V20H12V28H7C6.4 28 6 27.6 6 27V13Z" stroke={active?'#fff':'#3a3a3a'} strokeWidth="1.2" fill={active?'rgba(255,255,255,0.08)':'none'} strokeLinejoin="round"/></svg>) },
-  { id: 'artists', labelKey: 'nav-artists', icon: (active) => (<svg viewBox="0 0 32 32" fill="none" style={{width:26,height:26}}><circle cx="12" cy="10" r="4.5" stroke={active?'#fff':'#3a3a3a'} strokeWidth="1.2"/><path d="M4 26C4 21.6 7.6 18 12 18C14.2 18 16.2 18.9 17.6 20.4" stroke={active?'#fff':'#3a3a3a'} strokeWidth="1.2" strokeLinecap="round"/><circle cx="22" cy="20" r="5.5" stroke={active?'#fff':'#3a3a3a'} strokeWidth="1.2" fill={active?'rgba(255,255,255,0.08)':'none'}/><path d="M22 17V20L24 22" stroke={active?'#fff':'#3a3a3a'} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>) },
-  { id: 'custom', labelKey: 'nav-create', icon: (active) => (<svg viewBox="0 0 32 32" fill="none" style={{width:26,height:26}}><path d="M22 5L27 10L12 25L5 27L7 20L22 5Z" stroke={active?'#fff':'#3a3a3a'} strokeWidth="1.2" strokeLinejoin="round" fill={active?'rgba(255,255,255,0.08)':'none'}/><path d="M19 8L24 13" stroke={active?'#fff':'#3a3a3a'} strokeWidth="1.2"/></svg>) },
-  { id: 'booking', labelKey: 'nav-booking', icon: (active) => (<svg viewBox="0 0 32 32" fill="none" style={{width:26,height:26}}><rect x="5" y="7" width="22" height="20" rx="2" stroke={active?'#fff':'#3a3a3a'} strokeWidth="1.2" fill={active?'rgba(255,255,255,0.08)':'none'}/><path d="M5 13H27" stroke={active?'#fff':'#3a3a3a'} strokeWidth="1.2"/><path d="M11 5V9M21 5V9" stroke={active?'#fff':'#3a3a3a'} strokeWidth="1.2" strokeLinecap="round"/><path d="M10 19H16M10 23H13" stroke={active?'#fff':'#3a3a3a'} strokeWidth="1.2" strokeLinecap="round"/></svg>) },
-  { id: 'credits', labelKey: 'nav-credits', icon: (active) => (<svg viewBox="0 0 32 32" fill="none" style={{width:26,height:26}}><circle cx="16" cy="16" r="11" stroke={active?'#fff':'#3a3a3a'} strokeWidth="1.2" fill={active?'rgba(255,255,255,0.08)':'none'}/><path d="M16 10V22M13 12.5C13 11.1 14.3 10 16 10C17.7 10 19 11.1 19 12.5C19 15 13 15 13 17.5C13 18.9 14.3 20 16 20C17.7 20 19 18.9 19 17.5" stroke={active?'#fff':'#3a3a3a'} strokeWidth="1.2" strokeLinecap="round"/></svg>) },
+  { id: 'feed', labelKey: 'nav-home', icon: (active) => (<svg viewBox="0 0 32 32" fill="none" style={{width:26,height:26}}><path d="M6 13L16 4L26 13V27C26 27.6 25.6 28 25 28H20V20H12V28H7C6.4 28 6 27.6 6 27V13Z" stroke={active?'#fff':'#888888'} strokeWidth="1.2" fill={active?'rgba(255,255,255,0.08)':'none'} strokeLinejoin="round"/></svg>) },
+  { id: 'artists', labelKey: 'nav-artists', icon: (active) => (<svg viewBox="0 0 32 32" fill="none" style={{width:26,height:26}}><circle cx="12" cy="10" r="4.5" stroke={active?'#fff':'#888888'} strokeWidth="1.2"/><path d="M4 26C4 21.6 7.6 18 12 18C14.2 18 16.2 18.9 17.6 20.4" stroke={active?'#fff':'#888888'} strokeWidth="1.2" strokeLinecap="round"/><circle cx="22" cy="20" r="5.5" stroke={active?'#fff':'#888888'} strokeWidth="1.2" fill={active?'rgba(255,255,255,0.08)':'none'}/><path d="M22 17V20L24 22" stroke={active?'#fff':'#888888'} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>) },
+  { id: 'custom', labelKey: 'nav-create', icon: (active) => (<svg viewBox="0 0 32 32" fill="none" style={{width:26,height:26}}><path d="M22 5L27 10L12 25L5 27L7 20L22 5Z" stroke={active?'#fff':'#888888'} strokeWidth="1.2" strokeLinejoin="round" fill={active?'rgba(255,255,255,0.08)':'none'}/><path d="M19 8L24 13" stroke={active?'#fff':'#888888'} strokeWidth="1.2"/></svg>) },
+  { id: 'booking', labelKey: 'nav-booking', icon: (active) => (<svg viewBox="0 0 32 32" fill="none" style={{width:26,height:26}}><rect x="5" y="7" width="22" height="20" rx="2" stroke={active?'#fff':'#888888'} strokeWidth="1.2" fill={active?'rgba(255,255,255,0.08)':'none'}/><path d="M5 13H27" stroke={active?'#fff':'#888888'} strokeWidth="1.2"/><path d="M11 5V9M21 5V9" stroke={active?'#fff':'#888888'} strokeWidth="1.2" strokeLinecap="round"/><path d="M10 19H16M10 23H13" stroke={active?'#fff':'#888888'} strokeWidth="1.2" strokeLinecap="round"/></svg>) },
+  { id: 'credits', labelKey: 'nav-credits', icon: (active) => (<svg viewBox="0 0 32 32" fill="none" style={{width:26,height:26}}><circle cx="16" cy="16" r="11" stroke={active?'#fff':'#888888'} strokeWidth="1.2" fill={active?'rgba(255,255,255,0.08)':'none'}/><path d="M16 10V22M13 12.5C13 11.1 14.3 10 16 10C17.7 10 19 11.1 19 12.5C19 15 13 15 13 17.5C13 18.9 14.3 20 16 20C17.7 20 19 18.9 19 17.5" stroke={active?'#fff':'#888888'} strokeWidth="1.2" strokeLinecap="round"/></svg>) },
 ];
 
 const ADMIN_ITEM = {
   id: 'admin', labelKey: 'nav-admin',
-  icon: (active) => (<svg viewBox="0 0 32 32" fill="none" style={{width:26,height:26}}><path d="M16 4L26 9V16C26 21.5 21.6 26.6 16 28C10.4 26.6 6 21.5 6 16V9L16 4Z" stroke={active?'#fff':'#3a3a3a'} strokeWidth="1.2" strokeLinejoin="round" fill={active?'rgba(255,255,255,0.08)':'none'}/><path d="M12 16L15 19L21 13" stroke={active?'#fff':'#3a3a3a'} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>)
+  icon: (active) => (<svg viewBox="0 0 32 32" fill="none" style={{width:26,height:26}}><path d="M16 4L26 9V16C26 21.5 21.6 26.6 16 28C10.4 26.6 6 21.5 6 16V9L16 4Z" stroke={active?'#fff':'#888888'} strokeWidth="1.2" strokeLinejoin="round" fill={active?'rgba(255,255,255,0.08)':'none'}/><path d="M12 16L15 19L21 13" stroke={active?'#fff':'#888888'} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>)
 };
 
 function Sidebar({ open, onClose, onNavigate, onLogout, userProfile, t, isAdmin, currentPage, credits }) {
@@ -44,7 +44,7 @@ function Sidebar({ open, onClose, onNavigate, onLogout, userProfile, t, isAdmin,
     <>
       <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)', opacity: open ? 1 : 0, pointerEvents: open ? 'auto' : 'none', transition: 'opacity .3s ease' }} />
       <div style={{ position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 101, width: 280, background: '#0a0a0a', borderRight: '1px solid rgba(255,255,255,0.06)', transform: open ? 'translateX(0)' : 'translateX(-100%)', transition: 'transform .32s cubic-bezier(.4,0,.2,1)', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
-        <div style={{ padding: '52px 24px 24px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ padding: '52px 24px 24px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
           <div style={{ width: 52, height: 52, borderRadius: 14, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Cormorant Garamond, serif', fontSize: 20, color: 'rgba(255,255,255,0.5)', marginBottom: 12, fontStyle: 'italic' }}>
             {userProfile?.name?.slice(0, 2).toUpperCase() || '?'}
           </div>
@@ -52,7 +52,7 @@ function Sidebar({ open, onClose, onNavigate, onLogout, userProfile, t, isAdmin,
           <div style={{ fontSize: 10, fontFamily: 'DM Mono, monospace', color: '#333', letterSpacing: '.12em', textTransform: 'uppercase', marginBottom: 10 }}>{userProfile?.email || ''}</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 999, border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.03)' }}>
-              <div style={{ width: 5, height: 5, borderRadius: '50%', background: 'rgba(255,255,255,0.2)' }} />
+              <div style={{ width: 5, height: 5, borderRadius: '50%', background: 'rgba(255,255,255,0.5)' }} />
               <span style={{ fontSize: 9, fontFamily: 'DM Mono, monospace', color: '#444', letterSpacing: '.1em', textTransform: 'uppercase' }}>{userProfile?.role || ''}</span>
             </div>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 999, border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}>
@@ -63,25 +63,25 @@ function Sidebar({ open, onClose, onNavigate, onLogout, userProfile, t, isAdmin,
         </div>
 
         <div style={{ padding: '16px 12px', flex: 1 }}>
-          <div style={{ fontSize: 8, fontFamily: 'DM Mono, monospace', color: '#222', letterSpacing: '.2em', textTransform: 'uppercase', padding: '0 12px', marginBottom: 8 }}>Navigazione</div>
+          <div style={{ fontSize: 8, fontFamily: 'DM Mono, monospace', color: '#555', letterSpacing: '.2em', textTransform: 'uppercase', padding: '0 12px', marginBottom: 8 }}>Navigazione</div>
           {navItems.map(item => {
             const isActive = currentPage === item.id || (currentPage === 'profile' && item.id === 'artists');
             return (
-              <button key={item.id} onClick={() => { onNavigate(item.id); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '11px 12px', borderRadius: 10, border: 'none', background: isActive ? 'rgba(255,255,255,0.06)' : 'transparent', color: isActive ? '#f0ece4' : '#444', cursor: 'pointer', marginBottom: 2, fontFamily: 'Syne, sans-serif', fontSize: 13, fontWeight: isActive ? 600 : 400, letterSpacing: '.02em', transition: 'all .2s', textAlign: 'left', borderLeft: isActive ? '2px solid rgba(255,255,255,0.3)' : '2px solid transparent' }}>
-                <span style={{ color: isActive ? 'rgba(255,255,255,0.7)' : '#2a2a2a' }}>{item.icon}</span>
+              <button key={item.id} onClick={() => { onNavigate(item.id); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '11px 12px', borderRadius: 10, border: 'none', background: isActive ? 'rgba(255,255,255,0.06)' : 'transparent', color: isActive ? '#f0ece4' : '#aaa', cursor: 'pointer', marginBottom: 2, fontFamily: 'Syne, sans-serif', fontSize: 13, fontWeight: isActive ? 600 : 400, letterSpacing: '.02em', transition: 'all .2s', textAlign: 'left', borderLeft: isActive ? '2px solid rgba(255,255,255,0.3)' : '2px solid transparent' }}>
+                <span style={{ color: isActive ? 'rgba(255,255,255,0.9)' : '#666' }}>{item.icon}</span>
                 {item.label}
               </button>
             );
           })}
 
           <div style={{ height: 1, background: 'rgba(255,255,255,0.04)', margin: '16px 12px' }} />
-          <div style={{ fontSize: 8, fontFamily: 'DM Mono, monospace', color: '#222', letterSpacing: '.2em', textTransform: 'uppercase', padding: '0 12px', marginBottom: 8 }}>Account</div>
+          <div style={{ fontSize: 8, fontFamily: 'DM Mono, monospace', color: '#555', letterSpacing: '.2em', textTransform: 'uppercase', padding: '0 12px', marginBottom: 8 }}>Account</div>
 
-          <button onClick={() => { onNavigate('profile-user'); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '11px 12px', borderRadius: 10, border: 'none', background: 'transparent', color: '#444', cursor: 'pointer', marginBottom: 2, fontFamily: 'Syne, sans-serif', fontSize: 13, letterSpacing: '.02em', textAlign: 'left', borderLeft: '2px solid transparent' }}>
+          <button onClick={() => { onNavigate('profile-user'); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '11px 12px', borderRadius: 10, border: 'none', background: 'transparent', color: '#bbb', cursor: 'pointer', marginBottom: 2, fontFamily: 'Syne, sans-serif', fontSize: 13, letterSpacing: '.02em', textAlign: 'left', borderLeft: '2px solid transparent' }}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" style={{width:18,height:18,color:'#2a2a2a'}}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
             Il mio profilo
           </button>
-          <button onClick={() => { onLogout(); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '11px 12px', borderRadius: 10, border: 'none', background: 'transparent', color: '#333', cursor: 'pointer', fontFamily: 'Syne, sans-serif', fontSize: 13, letterSpacing: '.02em', textAlign: 'left', borderLeft: '2px solid transparent' }}>
+          <button onClick={() => { onLogout(); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '11px 12px', borderRadius: 10, border: 'none', background: 'transparent', color: '#999', cursor: 'pointer', fontFamily: 'Syne, sans-serif', fontSize: 13, letterSpacing: '.02em', textAlign: 'left', borderLeft: '2px solid transparent' }}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" style={{width:18,height:18,color:'#2a2a2a'}}><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             Esci
           </button>
@@ -166,11 +166,11 @@ function AppInner() {
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} onNavigate={handleNavClick} onLogout={logout} userProfile={userProfile} t={t} isAdmin={isAdmin} currentPage={page} credits={userCredits} />
 
       {/* Topbar */}
-      <div style={{ padding: '10px 16px', background: 'rgba(7,7,7,0.95)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', flexShrink: 0 }}>
+      <div style={{ padding: '10px 16px', background: 'rgba(7,7,7,0.95)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', flexShrink: 0 }}>
         <button onClick={() => setSidebarOpen(true)} style={{ background: 'none', border: 'none', padding: '6px 4px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: 5, justifySelf: 'start' }}>
-          <div style={{ width: 22, height: 1, background: 'rgba(255,255,255,0.3)', borderRadius: 1 }} />
-          <div style={{ width: 16, height: 1, background: 'rgba(255,255,255,0.2)', borderRadius: 1 }} />
-          <div style={{ width: 19, height: 1, background: 'rgba(255,255,255,0.15)', borderRadius: 1 }} />
+          <div style={{ width: 22, height: 1, background: 'rgba(255,255,255,0.7)', borderRadius: 1 }} />
+          <div style={{ width: 16, height: 1, background: 'rgba(255,255,255,0.5)', borderRadius: 1 }} />
+          <div style={{ width: 19, height: 1, background: 'rgba(255,255,255,0.4)', borderRadius: 1 }} />
         </button>
         {/* Logo + credits badge centrati insieme */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, justifySelf: 'center' }}>
@@ -184,20 +184,20 @@ function AppInner() {
               cursor: 'pointer', transition: 'all .2s',
             }}
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.3" style={{width:13,height:13}}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1.3" style={{width:13,height:13}}>
               <circle cx="12" cy="12" r="9"/>
               <path d="M12 7V17M9.5 9.5C9.5 8.4 10.6 7.5 12 7.5C13.4 7.5 14.5 8.4 14.5 9.5C14.5 11.5 9.5 11.5 9.5 13.5C9.5 14.6 10.6 15.5 12 15.5C13.4 15.5 14.5 14.6 14.5 13.5" strokeLinecap="round"/>
             </svg>
             <span style={{
               fontFamily: 'Cormorant Garamond, serif', fontSize: 15,
-              color: 'rgba(255,255,255,0.5)', fontStyle: 'italic', lineHeight: 1,
+              color: 'rgba(255,255,255,0.75)', fontStyle: 'italic', lineHeight: 1,
             }}>{userCredits}</span>
           </button>
           <img src="/Logo_Inklovers-2.png" alt="Ink Lovers" style={{ height: 44, objectFit: 'contain' }} />
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 4, justifySelf: 'end' }}>
           {['it','en','de'].map(l => (
-            <button key={l} onClick={() => setLang(l)} style={{ background: lang===l ? 'rgba(255,255,255,0.1)' : 'none', border: `1px solid ${lang===l ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.06)'}`, borderRadius: 4, padding: '3px 7px', fontFamily: 'DM Mono, monospace', fontSize: 9, color: lang===l ? '#fff' : '#333', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '.1em', transition: 'all .2s' }}>{l}</button>
+            <button key={l} onClick={() => setLang(l)} style={{ background: lang===l ? 'rgba(255,255,255,0.1)' : 'none', border: `1px solid ${lang===l ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.06)'}`, borderRadius: 4, padding: '3px 7px', fontFamily: 'DM Mono, monospace', fontSize: 9, color: lang===l ? '#fff' : '#999', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '.1em', transition: 'all .2s' }}>{l}</button>
           ))}
         </div>
       </div>
@@ -215,14 +215,14 @@ function AppInner() {
       </div>
 
       {/* Bottom nav */}
-      <div style={{ background: 'rgba(7,7,7,0.97)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexShrink: 0, padding: '2px 0 0' }}>
+      <div style={{ background: 'rgba(7,7,7,0.97)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexShrink: 0, padding: '2px 0 0' }}>
         {navItems.map(item => {
           const isActive = activeNavId === item.id;
           return (
             <button key={item.id} onClick={() => handleNavClick(item.id)} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, background: 'none', border: 'none', padding: '10px 0 10px', cursor: 'pointer', position: 'relative', transition: 'opacity .2s' }}>
               {isActive && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: 24, height: 1, background: 'linear-gradient(to right, transparent, #fff, transparent)' }} />}
               {item.icon(isActive)}
-              <span style={{ fontSize: 8, fontFamily: 'DM Mono, monospace', letterSpacing: '.12em', textTransform: 'uppercase', color: isActive ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.15)', transition: 'color .2s' }}>
+              <span style={{ fontSize: 8, fontFamily: 'DM Mono, monospace', letterSpacing: '.12em', textTransform: 'uppercase', color: isActive ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.45)', transition: 'color .2s' }}>
                 {item.id === 'admin' ? 'Admin' : item.id === 'credits' ? 'Premi' : t(item.labelKey)}
               </span>
             </button>
