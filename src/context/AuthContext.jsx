@@ -1,7 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { auth, db } from '../firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import {
+  createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  signOut, onAuthStateChanged
+} from 'firebase/auth';
+import { doc, setDoc, getDoc, collection, addDoc } from 'firebase/firestore';
 
 const AuthContext = createContext();
 export function useAuth() { return useContext(AuthContext); }
@@ -19,11 +22,43 @@ export function AuthProvider({ children }) {
 
   async function register(email, password, name, role) {
     const result = await createUserWithEmailAndPassword(auth, email, password);
-    await setDoc(doc(db, 'users', result.user.uid), { name, email, role, createdAt: new Date() });
+    const uid = result.user.uid;
+
+    // Salva profilo utente
+    await setDoc(doc(db, 'users', uid), {
+      name, email, role, credits: 0, createdAt: new Date()
+    });
+
+    // Se si registra come artista → crea automaticamente il profilo artista
+    if (role === 'artista') {
+      const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+      await setDoc(doc(db, 'artists', uid), {
+        uid,
+        name,
+        initials,
+        style: '',
+        bio: '',
+        specs: [],
+        works: 0,
+        rating: '—',
+        exp: '—',
+        photoUrl: '',
+        color: '#c8c8c8',
+        bg: '#1a1a1a',
+        createdAt: new Date(),
+      });
+    }
+
     return result;
   }
-  async function login(email, password) { return signInWithEmailAndPassword(auth, email, password); }
-  async function logout() { return signOut(auth); }
+
+  async function login(email, password) {
+    return signInWithEmailAndPassword(auth, email, password);
+  }
+
+  async function logout() {
+    return signOut(auth);
+  }
 
   useEffect(() => {
     const timeout = setTimeout(() => setLoading(false), 5000);
@@ -55,11 +90,9 @@ export function AuthProvider({ children }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {[0,1,2].map(i => (
             <div key={i} style={{
-              width: i === dots ? 20 : 4,
-              height: 1,
+              width: i === dots ? 20 : 4, height: 1,
               background: i === dots ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.1)',
-              borderRadius: 1,
-              transition: 'all .4s ease',
+              borderRadius: 1, transition: 'all .4s ease',
             }} />
           ))}
         </div>
