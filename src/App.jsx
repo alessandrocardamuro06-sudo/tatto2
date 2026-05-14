@@ -10,6 +10,7 @@ import AdminPage from './components/AdminPage';
 import CreditsPage from './components/CreditsPage';
 import AuthPage from './components/AuthPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import ArtistProfileEdit from './components/ArtistProfileEdit';
 
 const NAV_ITEMS = [
   { id: 'feed', labelKey: 'nav-home', icon: (active) => (<svg viewBox="0 0 32 32" fill="none" style={{width:26,height:26}}><path d="M6 13L16 4L26 13V27C26 27.6 25.6 28 25 28H20V20H12V28H7C6.4 28 6 27.6 6 27V13Z" stroke={active?'#fff':'#888888'} strokeWidth="1.2" fill={active?'rgba(255,255,255,0.08)':'none'} strokeLinejoin="round"/></svg>) },
@@ -77,6 +78,14 @@ function Sidebar({ open, onClose, onNavigate, onLogout, userProfile, t, isAdmin,
           <div style={{ height: 1, background: 'rgba(255,255,255,0.04)', margin: '16px 12px' }} />
           <div style={{ fontSize: 8, fontFamily: 'DM Mono, monospace', color: '#555', letterSpacing: '.2em', textTransform: 'uppercase', padding: '0 12px', marginBottom: 8 }}>Account</div>
 
+          {userProfile?.role === 'artista' && (
+            <button onClick={() => { onNavigate('artist-edit'); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '11px 12px', borderRadius: 10, border: 'none', background: currentPage === 'artist-edit' ? 'rgba(255,255,255,0.06)' : 'transparent', color: currentPage === 'artist-edit' ? '#f0ece4' : '#bbb', cursor: 'pointer', marginBottom: 2, fontFamily: 'Syne, sans-serif', fontSize: 13, letterSpacing: '.02em', transition: 'all .2s', textAlign: 'left', borderLeft: currentPage === 'artist-edit' ? '2px solid rgba(255,255,255,0.3)' : '2px solid transparent' }}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" style={{width:18,height:18,color:'#666'}}>
+                <path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+              </svg>
+              Profilo artista
+            </button>
+          )}
           <button onClick={() => { onNavigate('profile-user'); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '11px 12px', borderRadius: 10, border: 'none', background: 'transparent', color: '#bbb', cursor: 'pointer', marginBottom: 2, fontFamily: 'Syne, sans-serif', fontSize: 13, letterSpacing: '.02em', textAlign: 'left', borderLeft: '2px solid transparent' }}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" style={{width:18,height:18,color:'#2a2a2a'}}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
             Il mio profilo
@@ -211,7 +220,8 @@ function AppInner() {
         {page === 'booking' && <BookingPage t={t} preselectedArtist={preselectedArtist} userProfile={userProfile} />}
         {page === 'credits' && <CreditsPage t={t} />}
         {page === 'admin' && isAdmin && <AdminPage t={t} />}
-        {page === 'profile-user' && <UserProfilePage onBack={() => setPage('feed')} userProfile={userProfile} credits={userCredits} />}
+        {page === 'profile-user' && <UserProfilePage onBack={() => setPage('feed')} userProfile={userProfile} credits={userCredits} /> }
+        {page === 'artist-edit' && <ArtistProfileEdit onBack={() => setPage('feed')} />}
       </div>
 
       {/* Bottom nav */}
@@ -236,4 +246,5 @@ function AppInner() {
 export default function App() {
   return <AuthProvider><AppInner /></AuthProvider>;
 }
+
 
