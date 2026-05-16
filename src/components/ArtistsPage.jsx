@@ -36,6 +36,7 @@ function ArtistTile({ artist, index, onClick }) {
       {hasPhoto ? (
         <img
           src={artist.photoUrl}
+           onError={(e) => { console.error('IMG ERROR:', artist.name, artist.photoUrl); e.target.style.display='none'; }}
           alt={artist.name}
           style={{
             position: 'absolute', inset: 0,
