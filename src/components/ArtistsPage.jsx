@@ -36,7 +36,6 @@ function ArtistTile({ artist, index, onClick }) {
       {hasPhoto ? (
         <img
           src={artist.photoUrl}
-           onError={(e) => { console.error('IMG ERROR:', artist.name, artist.photoUrl); e.target.style.display='none'; }}
           alt={artist.name}
           style={{
             position: 'absolute', inset: 0,
@@ -303,12 +302,34 @@ export function ArtistProfile({ artistId, onBack, onBook, t, lang }) {
 
         {/* Lavori */}
         <div style={{ marginBottom: 24 }}>
-          <div style={{ fontSize: 8, fontFamily: 'DM Mono, monospace', color: '#444', textTransform: 'uppercase', letterSpacing: '.15em', marginBottom: 10 }}>
-            {t('recent-works')}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+            <div style={{ fontSize: 8, fontFamily: 'DM Mono, monospace', color: '#444', textTransform: 'uppercase', letterSpacing: '.15em' }}>
+              {t('recent-works')}
+              {(artist.workPhotos?.length > 0) && (
+                <span style={{ color: '#333', marginLeft: 6 }}>({artist.workPhotos.length})</span>
+              )}
+            </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 6 }}>
-            {Array(6).fill(null).map((_, i) => <WorkPlaceholder key={i} />)}
-          </div>
+          {(!artist.workPhotos || artist.workPhotos.length === 0) ? (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 6 }}>
+              {Array(6).fill(null).map((_, i) => <WorkPlaceholder key={i} />)}
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 6 }}>
+              {artist.workPhotos.map((work, i) => (
+                <div key={i} style={{
+                  aspectRatio: '1/1', borderRadius: 8, overflow: 'hidden',
+                  background: '#1a1a1a', border: '1px solid rgba(255,255,255,0.05)',
+                }}>
+                  <img
+                    src={work.url || work}
+                    alt={'Lavoro ' + (i + 1)}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <button onClick={() => onBook(artist.name)} style={{
