@@ -86,10 +86,12 @@ function Sidebar({ open, onClose, onNavigate, onLogout, userProfile, t, isAdmin,
               Profilo artista
             </button>
           )}
-          <button onClick={() => { onNavigate('profile-user'); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '11px 12px', borderRadius: 10, border: 'none', background: 'transparent', color: '#bbb', cursor: 'pointer', marginBottom: 2, fontFamily: 'Syne, sans-serif', fontSize: 13, letterSpacing: '.02em', textAlign: 'left', borderLeft: '2px solid transparent' }}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" style={{width:18,height:18,color:'#2a2a2a'}}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-            Il mio profilo
-          </button>
+          {userProfile?.role !== 'artista' && (
+            <button onClick={() => { onNavigate('profile-user'); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '11px 12px', borderRadius: 10, border: 'none', background: 'transparent', color: '#bbb', cursor: 'pointer', marginBottom: 2, fontFamily: 'Syne, sans-serif', fontSize: 13, letterSpacing: '.02em', textAlign: 'left', borderLeft: '2px solid transparent' }}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" style={{width:18,height:18,color:'#666'}}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+              Il mio profilo
+            </button>
+          )}
           <button onClick={() => { onLogout(); onClose(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '11px 12px', borderRadius: 10, border: 'none', background: 'transparent', color: '#999', cursor: 'pointer', fontFamily: 'Syne, sans-serif', fontSize: 13, letterSpacing: '.02em', textAlign: 'left', borderLeft: '2px solid transparent' }}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" style={{width:18,height:18,color:'#2a2a2a'}}><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             Esci
