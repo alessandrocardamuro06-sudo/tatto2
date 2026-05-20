@@ -23,10 +23,6 @@ export default function ArtistProfileEdit({ onBack }) {
   // Form state
   const [bio, setBio] = useState('');
   const [style, setStyle] = useState('');
-  const [specs, setSpecs] = useState([]);
-  const [newSpec, setNewSpec] = useState('');
-  const [exp, setExp] = useState('');
-  const [works, setWorks] = useState('');
 
   useEffect(() => {
     if (!currentUser) return;
@@ -36,9 +32,7 @@ export default function ArtistProfileEdit({ onBack }) {
         setArtist({ id: snap.id, ...data });
         setBio(data.bio || '');
         setStyle(data.style || '');
-        setSpecs(Array.isArray(data.specs) ? data.specs : []);
-        setExp(data.exp || '');
-        setWorks(data.works?.toString() || '');
+
       }
     });
     return unsub;
@@ -49,9 +43,7 @@ export default function ArtistProfileEdit({ onBack }) {
     setSaving(true);
     try {
       await updateDoc(doc(db, 'artists', currentUser.uid), {
-        bio, style, specs,
-        exp: exp || '—',
-        works: parseInt(works) || 0,
+        bio, style,
       });
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
@@ -116,12 +108,7 @@ export default function ArtistProfileEdit({ onBack }) {
     setDeletingWork(null);
   };
 
-  const addSpec = () => {
-    const s = newSpec.trim();
-    if (s && !specs.includes(s)) { setSpecs(prev => [...prev, s]); setNewSpec(''); }
-  };
 
-  const removeSpec = (s) => setSpecs(prev => prev.filter(x => x !== s));
 
   const inputStyle = {
     width: '100%', background: 'rgba(255,255,255,0.02)',
@@ -238,38 +225,7 @@ export default function ArtistProfileEdit({ onBack }) {
             <div style={{ fontSize: 10, color: '#2a2a2a', fontFamily: 'DM Mono, monospace', marginTop: 6, textAlign: 'right', letterSpacing: '.04em' }}>{bio.length} caratteri</div>
           </div>
 
-          {/* Specialità */}
-          <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 14, padding: 18, marginBottom: 14 }}>
-            <label style={labelStyle}>Specialità</label>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 12 }}>
-              {specs.map((s, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '4px 10px', borderRadius: 999, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.03)' }}>
-                  <span style={{ fontSize: 11, color: '#888', fontFamily: 'Syne, sans-serif' }}>{s}</span>
-                  <button onClick={() => removeSpec(s)} style={{ background: 'none', border: 'none', color: '#444', cursor: 'pointer', fontSize: 14, lineHeight: 1, padding: 0 }}>×</button>
-                </div>
-              ))}
-              {specs.length === 0 && <div style={{ fontSize: 11, color: '#2a2a2a', fontFamily: 'DM Mono, monospace' }}>nessuna specialità</div>}
-            </div>
-            <div style={{ display: 'flex', gap: 8 }}>
-              <input value={newSpec} onChange={e => setNewSpec(e.target.value)} onKeyDown={e => e.key === 'Enter' && addSpec()} placeholder="Es. Mandala, Ritratti…" style={{ ...inputStyle, flex: 1 }} />
-              <button onClick={addSpec} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, padding: '0 16px', color: 'rgba(255,255,255,0.5)', fontSize: 16, cursor: 'pointer', flexShrink: 0 }}>+</button>
-            </div>
-          </div>
 
-          {/* Statistiche */}
-          <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 14, padding: 18, marginBottom: 24 }}>
-            <label style={labelStyle}>Statistiche</label>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-              <div>
-                <div style={{ fontSize: 9, fontFamily: 'DM Mono, monospace', color: '#333', letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 5 }}>Lavori completati</div>
-                <input type="number" min="0" value={works} onChange={e => setWorks(e.target.value)} placeholder="0" style={inputStyle} />
-              </div>
-              <div>
-                <div style={{ fontSize: 9, fontFamily: 'DM Mono, monospace', color: '#333', letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 5 }}>Anni esperienza</div>
-                <input value={exp} onChange={e => setExp(e.target.value)} placeholder="es. 3y" style={inputStyle} />
-              </div>
-            </div>
-          </div>
 
           <button onClick={handleSave} disabled={saving} style={{ width: '100%', padding: 15, background: 'rgba(255,255,255,0.9)', color: '#0a0a0a', border: 'none', borderRadius: 12, fontSize: 12, fontWeight: 700, letterSpacing: '.1em', fontFamily: 'Syne, sans-serif', cursor: saving ? 'not-allowed' : 'pointer', textTransform: 'uppercase', opacity: saving ? 0.6 : 1 }}>
             {saving ? '· · ·' : 'Salva profilo'}
